@@ -35,6 +35,12 @@ public class ArraysAndStrings {
     }
     //////////////////////////  END ISUNIQUE ////////////////////////////////
 
+    /**
+     * check if string s is a permutation of string t
+     * @param s
+     * @param t
+     * @return true if s is permutation of t
+     */
     public static boolean isPermutation(String s, String t){
         if(s.length() != t.length()) return false;
         // could be done in O(n^2) simply, but that is really bad
@@ -50,9 +56,45 @@ public class ArraysAndStrings {
 
         return smap.equals(tmap);
     }
+    ////////////////////// END isPermutation ///////////////////////////////
+
+    public static void urlify(char[] s, int length){
+        int cursor = length-1;
+        boolean edge = true;
+        for(int i=length-1; i>=0; i--){
+            if(s[i] == ' '){
+                if(edge) continue;
+                s[cursor] = '0';
+                s[cursor-1] = '2';
+                s[cursor-2] = '%';
+                cursor -= 3;
+            }else{
+                edge = false;
+                s[cursor] = s[i];
+                cursor--;
+            }
+        }
+    }
     public static void main(String[] args) {
         // test my code if you dare!
-        // System.out.println(isPermutation("abcd", "cdab"));
-        // System.out.println(isPermutation("abcd", "cddb"));
+
+        // System.out.println(isPermutation("abcd", "cdab")); // true
+        // System.out.println(isPermutation("abcd", "cddb")); // false
+
+
+
+        // char[] url = new char[] {'s', 'o', 'm', 'e', ' ', 'l', 'i', 'n', 'k', ' ', ' '};
+        // for(char c : url){
+        //     System.out.print(c);
+        // }
+        // System.out.println("\n==================");
+        // urlify(url, 11);
+        // for(char c : url){
+        //     System.out.print(c);
+        // }
+        // System.out.println("\n==================");
+
+
+        
     }
 }
