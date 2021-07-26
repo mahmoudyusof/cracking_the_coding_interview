@@ -17,12 +17,6 @@ public class MyLinkedList<E> {
             head = new Node<>(item);
             tail = head;
         }else{
-            // Node<E> n = head;
-            // while(n.next != null){
-            //     n = n.next;
-            // }
-            // n.next = new Node<>(item);
-            // tail = n.next;
             Node<E> n = new Node<>(item);
             tail.next = n;
             tail = n;
@@ -41,4 +35,25 @@ public class MyLinkedList<E> {
         }
     }
 
+    public void insert(Node<E> item){
+        size++;
+        if (head == null){
+            head = item;
+            tail = head;
+        }else{
+            tail.next = item;
+            tail = item;
+        }
+    }
+
+    public void insert_before(Node<E> item){
+        size++;
+        if(head == null){
+            head = item;
+            tail = head;
+        }else{
+            item.next = head;
+            head = item;
+        }
+    }
 }

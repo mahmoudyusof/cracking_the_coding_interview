@@ -1,8 +1,5 @@
 import java.util.*;
-
-import DataStructures.MyLinkedList;
-import DataStructures.Node;
-import DataStructures.SumReturn;
+import DataStructures.*;
 
 public class LinkedLists {
     public static void removeDups(LinkedList<Integer> ll){
@@ -137,9 +134,10 @@ public class LinkedLists {
 
     public static void pad(MyLinkedList<Integer> ll, int padding_size){
         for(int i=0; i<padding_size; i++){
-            Node<Integer> n = new Node<Integer>(0);
-            n.next = ll.head;
-            ll.head = n;
+            // Node<Integer> n = new Node<Integer>(0);
+            // n.next = ll.head;
+            // ll.head = n;
+            ll.insert_before(0);
         }
     }
 
@@ -198,6 +196,118 @@ public class LinkedLists {
     }
 
 
+    public static boolean isPalindrome(MyLinkedList<Character> ll){
+
+        // NIGGA! why not a double linked list
+
+        MyLinkedList<Character> reversed = new MyLinkedList<>();
+        Node<Character> current = ll.head;
+        while (current != null){
+            reversed.insert_before(current.value);
+            current = current.next;
+        }
+
+        Node<Character> current1 = ll.head;
+        Node<Character> current2 = reversed.head;
+        while(current1 != null){
+            if(current1.value != current2.value){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void testIsPalindrome() {
+        MyLinkedList<Character> palindrome = new MyLinkedList<>();
+        MyLinkedList<Character> not_palindrome = new MyLinkedList<>();
+
+        palindrome.insert('a');
+        palindrome.insert('b');
+        palindrome.insert('c');
+        palindrome.insert('b');
+        palindrome.insert('a');
+
+        not_palindrome.insert('a');
+        not_palindrome.insert('b');
+        not_palindrome.insert('c');
+
+        assert isPalindrome(palindrome);
+        assert !isPalindrome(not_palindrome);
+    }
+
+    public static Node<Integer> getIntersectionNode(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2) {
+        Node<Integer> tail1 = l1.head;
+        Node<Integer> tail2 = l2.head;
+
+        while(tail1.next != null){
+            tail1 = tail1.next;
+        }
+        while(tail2.next != null){
+            tail2 = tail2.next;
+        }
+
+        if(tail1 != tail2) {
+            return null;
+        }
+        Node<Integer> current1 = l1.head;
+        Node<Integer> current2 = l2.head;
+        if(l1.size > l2.size){
+            for(int i=0; i<l1.size - l2.size; i++){
+                current1 = current1.next;
+            }
+        }else if(l2.size > l1.size){
+            for(int i=0; i<l1.size - l2.size; i++){
+                current1 = current1.next;
+            }
+        }
+
+        while(current1.next != null){
+            if(current1 == current2){
+                return current1;
+            }
+        }
+        return null;
+    }
+
+    public static void testGetIntersectionNode() {
+        Node<Integer> intersection = new Node<>(3);
+        MyLinkedList<Integer> i1 = new MyLinkedList<>();
+        MyLinkedList<Integer> i2 = new MyLinkedList<>();
+
+        i1.insert(-1);
+        i1.insert(0);
+        i1.insert(1);
+        i1.insert(2);
+        i1.insert(intersection);
+        i1.insert(4);
+        i1.insert(5);
+
+        i2.insert(1);
+        i2.insert(2);
+        i2.insert(intersection);
+
+        
+        MyLinkedList<Integer> ni1 = new MyLinkedList<>();
+        MyLinkedList<Integer> ni2 = new MyLinkedList<>();
+        
+        ni1.insert(-1);
+        ni1.insert(0);
+        ni1.insert(1);
+        ni1.insert(2);
+        ni1.insert(intersection);
+        ni1.insert(4);
+        ni1.insert(5);
+        
+        ni2.insert(1);
+        ni2.insert(2);
+        ni2.insert(intersection);
+        
+        assert getIntersectionNode(i1, i2).value == 3;
+        assert getIntersectionNode(ni1, ni2) == null;
+
+    }
+
+
     public static void main(String[] args) {
         // test me here
         testRemoveDups();
@@ -205,5 +315,7 @@ public class LinkedLists {
         testRemoveNode();
         testPartition();
         testAddLinkedLists();
+        testIsPalindrome();
+        testGetIntersectionNode();
     }
 }
