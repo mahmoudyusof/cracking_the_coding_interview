@@ -2,6 +2,7 @@ import java.util.*;
 
 import DataStructures.MyLinkedList;
 import DataStructures.Node;
+import DataStructures.SumReturn;
 
 public class LinkedLists {
     public static void removeDups(LinkedList<Integer> ll){
@@ -96,11 +97,113 @@ public class LinkedLists {
 
     }
 
+    public static MyLinkedList<Integer> partition(MyLinkedList<Integer> ll, int v){
+        Node<Integer> current = ll.head;
+        MyLinkedList<Integer> less = new MyLinkedList<>();
+        MyLinkedList<Integer> more = new MyLinkedList<>();
+        while(current != null){
+            if(current.value < v){
+                less.insert(current.value);
+            }else{
+                more.insert(current.value);
+            }
+            current = current.next;
+        }
+
+        less.tail.next = more.head;
+        less.tail = more.tail;
+        return less;
+    }
+
+    public static void testPartition(){
+        MyLinkedList<Integer> ll = new MyLinkedList<>();
+        ll.insert(5);
+        ll.insert(2);
+        ll.insert(7);
+        ll.insert(1);
+        ll.insert(3);
+        ll.insert(8);
+        ll.insert(9);
+        ll.insert(6);
+
+        MyLinkedList<Integer> newList = partition(ll, 5);
+        Node<Integer> current = newList.head;
+        while(current != null){
+            System.out.println(current.value);
+            current = current.next;
+        }
+    }
+
+
+    public static void pad(MyLinkedList<Integer> ll, int padding_size){
+        for(int i=0; i<padding_size; i++){
+            Node<Integer> n = new Node<Integer>(0);
+            n.next = ll.head;
+            ll.head = n;
+        }
+    }
+
+    public static MyLinkedList<Integer> addLinkedLists(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2){
+        // the backwards is easy, let's just make the forward one
+        // why not just use a bloody doubly linked list instead
+        // screw it why not use actual ints
+        // oh yeah, big integer and shit, ok
+        if(l1.size < l2.size){
+            pad(l1, l2.size - l1.size);
+        }else if(l1.size > l2.size){
+            pad(l2, l1.size - l2.size);
+        }
+        MyLinkedList<Integer> result = new MyLinkedList<>();
+        SumReturn last_value = partialSum(l1.head, l2.head, result);
+
+        if(last_value.carry == 1){
+            result.insert_before(1);
+        }
+        return result;
+    }
+
+    public static SumReturn partialSum(Node<Integer> n1, Node<Integer> n2, MyLinkedList<Integer> newll){
+        // padding and synced iteration is going to make both null at the same time
+        if(n1.next == null && n2.next == null){
+            // MyLinkedList<Integer> newll = new MyLinkedList<>();
+            int actual_sum = n1.value + n2.value;
+            newll.insert_before(actual_sum % 10);
+            return new SumReturn(actual_sum > 9, newll);
+        }
+
+        SumReturn inner = partialSum(n1.next, n2.next, newll);
+        int actual_sum = n1.value + n2.value + inner.carry;
+        newll.insert_before(actual_sum % 10);
+        return new SumReturn(actual_sum > 9, newll);
+    }
+
+
+    public static void testAddLinkedLists(){
+        MyLinkedList<Integer> l1 = new MyLinkedList<>();
+        MyLinkedList<Integer> l2 = new MyLinkedList<>();
+
+        l1.insert(9);
+        l1.insert(2);
+        l1.insert(8);
+
+        l2.insert(8);
+        l2.insert(5);
+
+        MyLinkedList<Integer> result = addLinkedLists(l1, l2);
+        assert result.head.value == 1;
+        assert result.head.next.value == 0;
+        assert result.head.next.next.value == 1;
+        assert result.head.next.next.next.value == 3;
+        
+    }
+
 
     public static void main(String[] args) {
         // test me here
         testRemoveDups();
         testKthToLastElement();
         testRemoveNode();
+        testPartition();
+        testAddLinkedLists();
     }
 }
