@@ -307,6 +307,52 @@ public class LinkedLists {
 
     }
 
+    public static Node<Integer> getLoopStart(Node<Integer> n) {
+        Node<Integer> slow = n;
+        Node<Integer> fast = n;
+        while(slow != fast){
+            if(slow.next == null || fast.next == null || fast.next.next == null){
+                return null;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        fast = n; // reusing for memory saving and because variable declaration is boring
+        while(slow != fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
+
+    public static void testGetLoopStart() {
+        MyLinkedList<Integer> ll = new MyLinkedList<>();
+        Node<Integer> start = new Node<Integer>(4);
+        Node<Integer> tail = new Node<Integer>(9);
+
+
+        ll.insert(0);
+        ll.insert(1);
+        ll.insert(2);
+        ll.insert(3);
+        ll.insert(start);
+        ll.insert(5);
+        ll.insert(6);
+        ll.insert(7);
+        ll.insert(8);
+        ll.insert(tail);
+
+        ll.tail.next = start;
+
+
+        MyLinkedList<Integer> noloop = new MyLinkedList<>();
+        noloop.insert(1);
+        noloop.insert(2);
+        noloop.insert(3);
+
+        assert getLoopStart(ll.head).value == 4;
+        assert getLoopStart(noloop.head) == null;
+    }
 
     public static void main(String[] args) {
         // test me here
@@ -317,5 +363,6 @@ public class LinkedLists {
         testAddLinkedLists();
         testIsPalindrome();
         testGetIntersectionNode();
+        testGetLoopStart();
     }
 }
