@@ -11,6 +11,8 @@ public class LinkedLists {
             int current = iter.next();
             if (seen.contains(current)){
                 iter.remove();
+            }else{
+                seen.add(current);
             }
         }
     }
@@ -44,10 +46,14 @@ public class LinkedLists {
         }
         // assuming the list must be larger than or as large as k
         // which means I am too lazy to validate this
-        int i = 0;
+        int i = 1;
+        iter = ll.iterator();
         while(iter.hasNext()){
             if(i == len - k){
                 return iter.next();
+            }else{
+                i++;
+                iter.next();
             }
         }
         throw new IndexOutOfBoundsException();
@@ -212,6 +218,9 @@ public class LinkedLists {
         while(current1 != null){
             if(current1.value != current2.value){
                 return false;
+            }else{
+                current1 = current1.next;
+                current2 = current2.next;
             }
         }
         return true;
@@ -238,12 +247,16 @@ public class LinkedLists {
     public static Node<Integer> getIntersectionNode(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2) {
         Node<Integer> tail1 = l1.head;
         Node<Integer> tail2 = l2.head;
+        int size1 = 0;
+        int size2 = 0;
 
         while(tail1.next != null){
             tail1 = tail1.next;
+            size1++;
         }
         while(tail2.next != null){
             tail2 = tail2.next;
+            size2++;
         }
 
         if(tail1 != tail2) {
@@ -251,12 +264,12 @@ public class LinkedLists {
         }
         Node<Integer> current1 = l1.head;
         Node<Integer> current2 = l2.head;
-        if(l1.size > l2.size){
-            for(int i=0; i<l1.size - l2.size; i++){
+        if(size1 > size2){
+            for(int i=0; i<size1 - size2; i++){
                 current1 = current1.next;
             }
-        }else if(l2.size > l1.size){
-            for(int i=0; i<l1.size - l2.size; i++){
+        }else if(size2 > size1){
+            for(int i=0; i<size2 - size1; i++){
                 current1 = current1.next;
             }
         }
@@ -264,6 +277,9 @@ public class LinkedLists {
         while(current1.next != null){
             if(current1 == current2){
                 return current1;
+            }else{
+                current1 = current1.next;
+                current2 = current2.next;
             }
         }
         return null;
@@ -294,13 +310,13 @@ public class LinkedLists {
         ni1.insert(0);
         ni1.insert(1);
         ni1.insert(2);
-        ni1.insert(intersection);
+        ni1.insert(3);
         ni1.insert(4);
         ni1.insert(5);
         
         ni2.insert(1);
         ni2.insert(2);
-        ni2.insert(intersection);
+        ni2.insert(3);
         
         assert getIntersectionNode(i1, i2).value == 3;
         assert getIntersectionNode(ni1, ni2) == null;
@@ -308,8 +324,8 @@ public class LinkedLists {
     }
 
     public static Node<Integer> getLoopStart(Node<Integer> n) {
-        Node<Integer> slow = n;
-        Node<Integer> fast = n;
+        Node<Integer> slow = n.next;
+        Node<Integer> fast = n.next.next;
         while(slow != fast){
             if(slow.next == null || fast.next == null || fast.next.next == null){
                 return null;

@@ -1,0 +1,47 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "vmArgs": "-enableassertions"
+        },
+        {
+            "type": "java",
+            "name": "Launch ArraysAndStrings",
+            "request": "launch",
+            "mainClass": "ArraysAndStrings",
+            "projectName": "crackingTCI_39fa4668",
+            "vmArgs": "-enableassertions"
+        },
+        {
+            "type": "java",
+            "name": "Launch GraphsAndTrees",
+            "request": "launch",
+            "mainClass": "GraphsAndTrees",
+            "projectName": "crackingTCI_39fa4668",
+            "vmArgs": "-enableassertions"
+        },
+        {
+            "type": "java",
+            "name": "Launch LinkedLists",
+            "request": "launch",
+            "mainClass": "LinkedLists",
+            "projectName": "crackingTCI_39fa4668",
+            "vmArgs": "-enableassertions"
+        },
+        {
+            "type": "java",
+            "name": "Launch StacksAndQueues",
+            "request": "launch",
+            "mainClass": "StacksAndQueues",
+            "projectName": "crackingTCI_39fa4668",
+            "vmArgs": "-enableassertions"
+        }
+    ]
+}
