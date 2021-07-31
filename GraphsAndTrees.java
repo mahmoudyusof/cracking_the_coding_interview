@@ -1,6 +1,9 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
+import DataStructures.BinarySearchTree;
+import DataStructures.BinaryTreeNode;
 import DataStructures.GraphNode;
 
 public class GraphsAndTrees{
@@ -46,7 +49,45 @@ public class GraphsAndTrees{
         
         
     }
+
+    public static void populate(BinaryTreeNode node, ArrayList<Integer> elements, int start, int end){
+        // terminal condition
+        if(end - start <= 1){
+            int mid_index = (start + end) / 2;
+            node.data = elements.get(mid_index);
+            return;
+        }
+
+        int mid_index = (start + end) / 2;
+        node.data = elements.get(mid_index);
+        node.right = new BinaryTreeNode();
+        node.left = new BinaryTreeNode();
+        populate(node.right, elements, mid_index+1, end);
+        populate(node.left, elements, start, mid_index);
+    }
+
+    public static BinarySearchTree makeMinHeightTree(ArrayList<Integer> elements) {
+        int size = elements.size();
+        BinarySearchTree tree = new BinarySearchTree();
+        populate(tree.root, elements, 0, size);
+        return tree;
+    }
+
+    public static void testMakeMinHeightTree() {
+        ArrayList<Integer> elements = new ArrayList<>();
+        for(int i=0; i<15; i++){
+            elements.add(i);
+        }
+        BinarySearchTree tree = makeMinHeightTree(elements);
+        assert tree.getHeight() == 4;
+
+        elements.add(15);
+        tree = makeMinHeightTree(elements);
+        assert tree.getHeight() == 5;
+
+    }
     public static void main(String[] args) {
         testRouteExists();
+        testMakeMinHeightTree();
     }
 }
