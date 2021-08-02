@@ -13,6 +13,9 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         this.data = null;
     }
 
+
+    public void insert(T value){}
+
     public int getHeight(){
         return getHeightHelper(this);
     }

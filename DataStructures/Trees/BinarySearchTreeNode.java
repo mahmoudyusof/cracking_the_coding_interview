@@ -1,9 +1,6 @@
 package DataStructures.Trees;
 
 public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNode<T>{
-    public T data;
-    public BinarySearchTreeNode<T> right = null;
-    public BinarySearchTreeNode<T> left = null;
 
     public BinarySearchTreeNode(T value){
         data = value;

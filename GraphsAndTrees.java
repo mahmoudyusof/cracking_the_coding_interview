@@ -1,4 +1,10 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.*;
+
+import org.junit.Test;
 
 import DataStructures.Graphs.*;
 import DataStructures.Trees.*;
@@ -26,7 +32,8 @@ public class GraphsAndTrees{
         return false;
     }
 
-    public static void testRouteExists() {
+    @Test
+    public void testRouteExists() {
         GraphNode<Integer> node1 = new GraphNode<>(0);
         GraphNode<Integer> node2 = new GraphNode<>(0);
         GraphNode<Integer> node3 = new GraphNode<>(0);
@@ -41,10 +48,8 @@ public class GraphsAndTrees{
         node5.appendChild(node6);
         node6.appendChild(node2);
 
-        assert routeExists(node1, node6) : "cannot reach node 6 from node 1";
-        assert !routeExists(node6, node1) : "can reach node 1 from node 6";
-        
-        
+        assertTrue(routeExists(node1, node6));
+        assertFalse(routeExists(node6, node1));
     }
 
     public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end){
@@ -70,17 +75,18 @@ public class GraphsAndTrees{
         return tree;
     }
 
-    public static void testMakeMinHeightTree() {
+    @Test
+    public void testMakeMinHeightTree() {
         ArrayList<Integer> elements = new ArrayList<>();
         for(int i=0; i<15; i++){
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
-        assert tree.getHeight() == 4;
+        assertEquals(4, tree.getHeight());
 
         elements.add(15);
         tree = makeMinHeightTree(elements);
-        assert tree.getHeight() == 5;
+        assertEquals(5, tree.getHeight());
 
     }
 
@@ -110,20 +116,20 @@ public class GraphsAndTrees{
         }
     }
 
-    public static void testArrayOfDepths() {
+    @Test
+    public void testArrayOfDepths() {
         ArrayList<Integer> elements = new ArrayList<>();
         for(int i=0; i<15; i++){
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
         ArrayList<LinkedList<Integer>> array_of_depths = arrayOfDepths(tree);
+        
+        assertEquals(4, array_of_depths.size());
+        int count = 1;
         for(LinkedList<Integer> level : array_of_depths){
-            Iterator<Integer> iter = level.iterator();
-            while(iter.hasNext()){
-                System.out.print(iter.next());
-                System.out.print(" ");
-            }
-            System.out.println("");
+            assertEquals(count, level.size());
+            count *= 2;
         }
     }
 
@@ -145,25 +151,19 @@ public class GraphsAndTrees{
         return checkBalanced(node.right) && checkBalanced(node.left);
     }
 
-    public static void testCheckBalanced() {
+    @Test
+    public void testCheckBalanced() {
         ArrayList<Integer> elements = new ArrayList<>();
         for(int i=0; i<15; i++){
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
-        assert checkBalanced(tree.root);
+        assertTrue(checkBalanced(tree.root));
 
         tree = new BinarySearchTree<>();
         for(int i=0; i<15; i++){
             tree.insert(i);
         }
-        assert !checkBalanced(tree.root);
-    }
-
-    public static void main(String[] args) {
-        testRouteExists();
-        testMakeMinHeightTree();
-        testArrayOfDepths();
-        testCheckBalanced();
+        assertFalse(checkBalanced(tree.root));
     }
 }

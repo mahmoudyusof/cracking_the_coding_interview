@@ -1,4 +1,9 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.util.Stack;
+
+import org.junit.Test;
 
 public class StacksAndQueues {
     public static Stack<Integer> sortStack(Stack<Integer> s) {
@@ -22,7 +27,8 @@ public class StacksAndQueues {
         return sorted;
     }
 
-    public static void testSortStack(){
+    @Test
+    public void testSortStack(){
         Stack<Integer> s = new Stack<>();
         s.push(5);
         s.push(2);
@@ -33,16 +39,13 @@ public class StacksAndQueues {
 
         Stack<Integer> sorted = sortStack(s);
 
-        assert !sorted.isEmpty();
+        assertFalse(sorted.isEmpty());
         int count = 0;
         while(!sorted.isEmpty()){
             int value = sorted.pop();
+            assertEquals(count, value);
             assert value == count;
             count++;
         }
-    }
-
-    public static void main(String[] args) {
-        testSortStack();
     }
 }

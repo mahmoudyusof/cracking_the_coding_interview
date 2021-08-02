@@ -11,7 +11,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return getHeightHelper(root);
     }
 
-    private int getHeightHelper(BinarySearchTreeNode<T> node){
+    private int getHeightHelper(BinaryTreeNode<T> node){
         if(node == null){
             return 0;
         }else{
@@ -25,7 +25,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         inOrderPrintHelper(root);
     }
 
-    private void inOrderPrintHelper(BinarySearchTreeNode<T> node){
+    private void inOrderPrintHelper(BinaryTreeNode<T> node){
         if(node.left != null){
             inOrderPrintHelper(node.left);
         }
@@ -39,7 +39,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         postOrderPrintHelper(root);
     }
 
-    private void postOrderPrintHelper(BinarySearchTreeNode<T> node){
+    private void postOrderPrintHelper(BinaryTreeNode<T> node){
         if(node.left != null){
             postOrderPrintHelper(node.left);
         }
