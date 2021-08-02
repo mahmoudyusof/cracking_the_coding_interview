@@ -1,4 +1,6 @@
-package DataStructures;
+package Helpers;
+
+import DataStructures.Lists.MyLinkedList;
 
 public class SumReturn {
     public MyLinkedList<Integer> ll;

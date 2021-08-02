@@ -1,4 +1,4 @@
-package DataStructures;
+package DataStructures.Graphs;
 
 import java.util.ArrayList;
 

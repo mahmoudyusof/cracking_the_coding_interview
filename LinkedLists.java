@@ -1,5 +1,11 @@
+import static org.junit.Assert.*;
+
 import java.util.*;
-import DataStructures.*;
+
+import org.junit.Test;
+
+import DataStructures.Lists.*;
+import Helpers.SumReturn;
 
 public class LinkedLists {
     public static void removeDups(LinkedList<Integer> ll){
@@ -17,7 +23,8 @@ public class LinkedLists {
         }
     }
 
-    public static void testRemoveDups(){
+    @Test
+    public void testRemoveDups(){
         Integer[] arr1 = new Integer[] {1, 2, 3, 4, 5};
         Integer[] arr2 = new Integer[] {1, 1, 1, 4, 5};
         Integer[] arr3 = new Integer[] {1, 2, 3, 1, 5};
@@ -28,14 +35,13 @@ public class LinkedLists {
         removeDups(l1);
         removeDups(l2);
         removeDups(l3);
-
-        assert l1.size() == 5;
-        assert l2.size() == 3;
-        assert l3.size() == 4;
+        assertEquals(5, l1.size());
+        assertEquals(3, l2.size());
+        assertEquals(4, l3.size());
     }
 
 
-    public static Integer kthToLastElement(LinkedList<Integer> ll, Integer k) throws IndexOutOfBoundsException{
+    public static int kthToLastElement(LinkedList<Integer> ll, Integer k) throws IndexOutOfBoundsException{
         // assuming we don't know the length
         // we can get the length first, then use it
         Iterator<Integer> iter = ll.iterator();
@@ -59,7 +65,8 @@ public class LinkedLists {
         throw new IndexOutOfBoundsException();
     }
 
-    public static void testKthToLastElement(){
+    @Test
+    public void testKthToLastElement(){
         Integer[] arr1 = new Integer[] {1, 2, 3, 4, 5};
         Integer[] arr2 = new Integer[] {1, 1, 1, 4, 5};
         Integer[] arr3 = new Integer[] {1, 2, 3, 1, 5};
@@ -67,9 +74,9 @@ public class LinkedLists {
         LinkedList<Integer> l2 = new LinkedList<Integer>(Arrays.asList(arr2));
         LinkedList<Integer> l3 = new LinkedList<Integer>(Arrays.asList(arr3));
 
-        assert kthToLastElement(l1, 0) == 5;
-        assert kthToLastElement(l2, 1) == 4;
-        assert kthToLastElement(l3, 2) == 3;
+        assertEquals(5, kthToLastElement(l1, 0));
+        assertEquals(4, kthToLastElement(l2, 1));
+        assertEquals(3, kthToLastElement(l3, 2));
     }
 
     public static void removeNode(MyLinkedList<Integer> ll, Node<Integer> node){
@@ -84,7 +91,8 @@ public class LinkedLists {
         }
     }
 
-    public static void testRemoveNode(){
+    @Test
+    public void testRemoveNode(){
         MyLinkedList<Integer> l1 = new MyLinkedList<>();
         for(int i=0; i<6; i++){
             l1.insert(i);
@@ -94,7 +102,7 @@ public class LinkedLists {
 
         Node<Integer> current = l1.head;
         do{
-            assert current.value != 2;
+            assertNotEquals(Integer.valueOf(2), current.value);
             current = current.next;
         }while(current != null);
 
@@ -182,7 +190,8 @@ public class LinkedLists {
     }
 
 
-    public static void testAddLinkedLists(){
+    @Test
+    public void testAddLinkedLists(){
         MyLinkedList<Integer> l1 = new MyLinkedList<>();
         MyLinkedList<Integer> l2 = new MyLinkedList<>();
 
@@ -194,10 +203,10 @@ public class LinkedLists {
         l2.insert(5);
 
         MyLinkedList<Integer> result = addLinkedLists(l1, l2);
-        assert result.head.value == 1;
-        assert result.head.next.value == 0;
-        assert result.head.next.next.value == 1;
-        assert result.head.next.next.next.value == 3;
+        assertEquals(Integer.valueOf(1), result.head.value);
+        assertEquals(Integer.valueOf(0), result.head.next.value);
+        assertEquals(Integer.valueOf(1), result.head.next.next.value);
+        assertEquals(Integer.valueOf(3), result.head.next.next.next.value);
         
     }
 
@@ -240,8 +249,8 @@ public class LinkedLists {
         not_palindrome.insert('b');
         not_palindrome.insert('c');
 
-        assert isPalindrome(palindrome);
-        assert !isPalindrome(not_palindrome);
+        assertTrue(isPalindrome(palindrome));
+        assertFalse(isPalindrome(not_palindrome));
     }
 
     public static Node<Integer> getIntersectionNode(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2) {
@@ -285,7 +294,8 @@ public class LinkedLists {
         return null;
     }
 
-    public static void testGetIntersectionNode() {
+    @Test
+    public void testGetIntersectionNode() {
         Node<Integer> intersection = new Node<>(3);
         MyLinkedList<Integer> i1 = new MyLinkedList<>();
         MyLinkedList<Integer> i2 = new MyLinkedList<>();
@@ -318,8 +328,8 @@ public class LinkedLists {
         ni2.insert(2);
         ni2.insert(3);
         
-        assert getIntersectionNode(i1, i2).value == 3;
-        assert getIntersectionNode(ni1, ni2) == null;
+        assertEquals(Integer.valueOf(3), getIntersectionNode(i1, i2).value);
+        assertNull(getIntersectionNode(ni1, ni2));
 
     }
 
@@ -341,7 +351,8 @@ public class LinkedLists {
         return fast;
     }
 
-    public static void testGetLoopStart() {
+    @Test
+    public void testGetLoopStart() {
         MyLinkedList<Integer> ll = new MyLinkedList<>();
         Node<Integer> start = new Node<Integer>(4);
         Node<Integer> tail = new Node<Integer>(9);
@@ -366,19 +377,7 @@ public class LinkedLists {
         noloop.insert(2);
         noloop.insert(3);
 
-        assert getLoopStart(ll.head).value == 4;
-        assert getLoopStart(noloop.head) == null;
-    }
-
-    public static void main(String[] args) {
-        // test me here
-        testRemoveDups();
-        testKthToLastElement();
-        testRemoveNode();
-        testPartition();
-        testAddLinkedLists();
-        testIsPalindrome();
-        testGetIntersectionNode();
-        testGetLoopStart();
+        assertEquals(Integer.valueOf(4), getLoopStart(ll.head).value);
+        assertNull(getLoopStart(noloop.head));
     }
 }

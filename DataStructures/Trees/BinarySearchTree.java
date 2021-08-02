@@ -1,9 +1,9 @@
-package DataStructures;
+package DataStructures.Trees;
 
-public class BinarySearchTree {
-    public BinaryTreeNode root = new BinaryTreeNode();
+public class BinarySearchTree<T extends Comparable<T>> {
+    public BinarySearchTreeNode<T> root = new BinarySearchTreeNode<T>();
 
-    public void insert(Integer data){
+    public void insert(T data){
         root.insert(data);
     }
 
@@ -11,7 +11,7 @@ public class BinarySearchTree {
         return getHeightHelper(root);
     }
 
-    private int getHeightHelper(BinaryTreeNode node){
+    private int getHeightHelper(BinarySearchTreeNode<T> node){
         if(node == null){
             return 0;
         }else{
@@ -25,7 +25,7 @@ public class BinarySearchTree {
         inOrderPrintHelper(root);
     }
 
-    private void inOrderPrintHelper(BinaryTreeNode node){
+    private void inOrderPrintHelper(BinarySearchTreeNode<T> node){
         if(node.left != null){
             inOrderPrintHelper(node.left);
         }
@@ -39,7 +39,7 @@ public class BinarySearchTree {
         postOrderPrintHelper(root);
     }
 
-    private void postOrderPrintHelper(BinaryTreeNode node){
+    private void postOrderPrintHelper(BinarySearchTreeNode<T> node){
         if(node.left != null){
             postOrderPrintHelper(node.left);
         }
