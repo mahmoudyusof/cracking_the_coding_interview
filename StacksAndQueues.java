@@ -5,21 +5,26 @@ import java.util.Stack;
 import org.junit.jupiter.api.Test;
 
 public class StacksAndQueues {
-    public static Stack<Integer> sortStack(Stack<Integer> s) {
+    /**
+     * Sorts a stack using another stack
+     * @param stack
+     * @return sorted stack
+     */
+    public static Stack<Integer> sortStack(Stack<Integer> stack) {
         Stack<Integer> sorted = new Stack<>();
-        while (!s.isEmpty()) {
-            if (sorted.isEmpty() || s.peek() < sorted.peek()) {
-                sorted.push(s.pop());
+        while (!stack.isEmpty()) {
+            if (sorted.isEmpty() || stack.peek() < sorted.peek()) {
+                sorted.push(stack.pop());
             } else {
-                int temp = s.pop();
+                int temp = stack.pop();
                 int count = 0;
                 while (!sorted.isEmpty() && temp > sorted.peek()) {
-                    s.push(sorted.pop());
+                    stack.push(sorted.pop());
                     count++;
                 }
                 sorted.push(temp);
                 for (int i = 0; i < count; i++) {
-                    sorted.push(s.pop());
+                    sorted.push(stack.pop());
                 }
             }
         }

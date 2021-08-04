@@ -8,11 +8,16 @@ import DataStructures.Lists.*;
 import Helpers.SumReturn;
 
 public class LinkedLists {
-    public static void removeDups(LinkedList<Integer> ll) {
+    /**
+     * removes duplicated items in a linked list
+     * 
+     * @param linked_list
+     */
+    public static void removeDups(LinkedList<Integer> linked_list) {
         // this is the O(n) solution
         // without any buffer it would take up to O(n^2)
         HashSet<Integer> seen = new HashSet<>();
-        Iterator<Integer> iter = ll.iterator();
+        Iterator<Integer> iter = linked_list.iterator();
         while (iter.hasNext()) {
             int current = iter.next();
             if (seen.contains(current)) {
@@ -40,10 +45,18 @@ public class LinkedLists {
         assertEquals(4, l3.size());
     }
 
-    public static int kthToLastElement(LinkedList<Integer> ll, Integer k) throws IndexOutOfBoundsException {
+    /**
+     * returns the kth to last element of a single linked list
+     * 
+     * @param linked_list
+     * @param k
+     * @return value of kth to last element
+     * @throws IndexOutOfBoundsException if k is not within the range of the list
+     */
+    public static int kthToLastElement(LinkedList<Integer> linked_list, Integer k) throws IndexOutOfBoundsException {
         // assuming we don't know the length
         // we can get the length first, then use it
-        Iterator<Integer> iter = ll.iterator();
+        Iterator<Integer> iter = linked_list.iterator();
         int len = 0;
         while (iter.hasNext()) {
             len++;
@@ -52,7 +65,7 @@ public class LinkedLists {
         // assuming the list must be larger than or as large as k
         // which means I am too lazy to validate this
         int i = 1;
-        iter = ll.iterator();
+        iter = linked_list.iterator();
         while (iter.hasNext()) {
             if (i == len - k) {
                 return iter.next();
@@ -78,8 +91,14 @@ public class LinkedLists {
         assertEquals(3, kthToLastElement(l3, 2));
     }
 
-    public static void removeNode(MyLinkedList<Integer> ll, Node<Integer> node) {
-        Node<Integer> prev = ll.head;
+    /**
+     * removes a node from a single linked list given the node itself
+     * 
+     * @param linked_list
+     * @param node
+     */
+    public static void removeNode(MyLinkedList<Integer> linked_list, Node<Integer> node) {
+        Node<Integer> prev = linked_list.head;
         while (prev.next != null) {
             Node<Integer> current = prev.next;
             if (current == node) {
@@ -107,12 +126,21 @@ public class LinkedLists {
 
     }
 
-    public static MyLinkedList<Integer> partition(MyLinkedList<Integer> ll, int v) {
-        Node<Integer> current = ll.head;
+    /**
+     * takes a linked list and returns a new one where all elements greater than
+     * pivot are on one side and all elements less than pivot are on the other side
+     * like one step of quick sort
+     * 
+     * @param linked_list
+     * @param pivot
+     * @return
+     */
+    public static MyLinkedList<Integer> partition(MyLinkedList<Integer> linked_list, int pivot) {
+        Node<Integer> current = linked_list.head;
         MyLinkedList<Integer> less = new MyLinkedList<>();
         MyLinkedList<Integer> more = new MyLinkedList<>();
         while (current != null) {
-            if (current.value < v) {
+            if (current.value < pivot) {
                 less.insert(current.value);
             } else {
                 more.insert(current.value);
@@ -144,27 +172,40 @@ public class LinkedLists {
         }
     }
 
-    public static void pad(MyLinkedList<Integer> ll, int padding_size) {
+    /**
+     * zero pads a linked list from the head side of the list
+     * 
+     * @param linked_list
+     * @param padding_size
+     */
+    public static void pad(MyLinkedList<Integer> linked_list, int padding_size) {
         for (int i = 0; i < padding_size; i++) {
-            // Node<Integer> n = new Node<Integer>(0);
-            // n.next = ll.head;
-            // ll.head = n;
-            ll.insert_before(0);
+            linked_list.insert_before(0);
         }
     }
 
-    public static MyLinkedList<Integer> addLinkedLists(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2) {
+    /**
+     * assuming that each linked list represents an integer where each element in
+     * the list represents a digit this function creates a new list of the addition
+     * value of the linked lists
+     * 
+     * @param linked_list_one
+     * @param linked_list_two
+     * @return linked list, the sum of the two linked lists
+     */
+    public static MyLinkedList<Integer> addLinkedLists(MyLinkedList<Integer> linked_list_one,
+            MyLinkedList<Integer> linked_list_two) {
         // the backwards is easy, let's just make the forward one
         // why not just use a bloody doubly linked list instead
         // screw it why not use actual ints
         // oh yeah, big integer and shit, ok
-        if (l1.size < l2.size) {
-            pad(l1, l2.size - l1.size);
-        } else if (l1.size > l2.size) {
-            pad(l2, l1.size - l2.size);
+        if (linked_list_one.size < linked_list_two.size) {
+            pad(linked_list_one, linked_list_two.size - linked_list_one.size);
+        } else if (linked_list_one.size > linked_list_two.size) {
+            pad(linked_list_two, linked_list_one.size - linked_list_two.size);
         }
         MyLinkedList<Integer> result = new MyLinkedList<>();
-        SumReturn last_value = partialSum(l1.head, l2.head, result);
+        SumReturn last_value = partialSum(linked_list_one.head, linked_list_two.head, result);
 
         if (last_value.carry == 1) {
             result.insert_before(1);
@@ -172,19 +213,30 @@ public class LinkedLists {
         return result;
     }
 
-    public static SumReturn partialSum(Node<Integer> n1, Node<Integer> n2, MyLinkedList<Integer> newll) {
+    /**
+     * helper function for addLinkedLists this one is called recursively on specific
+     * nodes to add the sub linked list starting from these nodes it returns the
+     * SumReturn of the addition of the sub lists and populates the new_linked_list
+     * which is passed by reference
+     * 
+     * @param node_one
+     * @param node_two
+     * @param new_linked_list
+     * @return
+     */
+    public static SumReturn partialSum(Node<Integer> node_one, Node<Integer> node_two,
+            MyLinkedList<Integer> new_linked_list) {
         // padding and synced iteration is going to make both null at the same time
-        if (n1.next == null && n2.next == null) {
-            // MyLinkedList<Integer> newll = new MyLinkedList<>();
-            int actual_sum = n1.value + n2.value;
-            newll.insert_before(actual_sum % 10);
-            return new SumReturn(actual_sum > 9, newll);
+        if (node_one.next == null && node_two.next == null) {
+            int actual_sum = node_one.value + node_two.value;
+            new_linked_list.insert_before(actual_sum % 10);
+            return new SumReturn(actual_sum > 9, new_linked_list);
         }
 
-        SumReturn inner = partialSum(n1.next, n2.next, newll);
-        int actual_sum = n1.value + n2.value + inner.carry;
-        newll.insert_before(actual_sum % 10);
-        return new SumReturn(actual_sum > 9, newll);
+        SumReturn inner = partialSum(node_one.next, node_two.next, new_linked_list);
+        int actual_sum = node_one.value + node_two.value + inner.carry;
+        new_linked_list.insert_before(actual_sum % 10);
+        return new SumReturn(actual_sum > 9, new_linked_list);
     }
 
     @Test
@@ -207,18 +259,22 @@ public class LinkedLists {
 
     }
 
-    public static boolean isPalindrome(MyLinkedList<Character> ll) {
-
-        // NIGGA! why not a double linked list
-
+    /**
+     * checks if a given linked list represents a palindrom I wish this linked list
+     * was a doubly linked list but the author is a moron
+     * 
+     * @param linked_list
+     * @return
+     */
+    public static boolean isPalindrome(MyLinkedList<Character> linked_list) {
         MyLinkedList<Character> reversed = new MyLinkedList<>();
-        Node<Character> current = ll.head;
+        Node<Character> current = linked_list.head;
         while (current != null) {
             reversed.insert_before(current.value);
             current = current.next;
         }
 
-        Node<Character> current1 = ll.head;
+        Node<Character> current1 = linked_list.head;
         Node<Character> current2 = reversed.head;
         while (current1 != null) {
             if (current1.value != current2.value) {
@@ -249,9 +305,18 @@ public class LinkedLists {
         assertFalse(isPalindrome(not_palindrome));
     }
 
-    public static Node<Integer> getIntersectionNode(MyLinkedList<Integer> l1, MyLinkedList<Integer> l2) {
-        Node<Integer> tail1 = l1.head;
-        Node<Integer> tail2 = l2.head;
+    /**
+     * given two linked lists if they are intersecting this function returns the
+     * intersection node otherwise it returns null
+     * 
+     * @param linked_list_one
+     * @param linked_list_two
+     * @return
+     */
+    public static Node<Integer> getIntersectionNode(MyLinkedList<Integer> linked_list_one,
+            MyLinkedList<Integer> linked_list_two) {
+        Node<Integer> tail1 = linked_list_one.head;
+        Node<Integer> tail2 = linked_list_two.head;
         int size1 = 0;
         int size2 = 0;
 
@@ -267,8 +332,8 @@ public class LinkedLists {
         if (tail1 != tail2) {
             return null;
         }
-        Node<Integer> current1 = l1.head;
-        Node<Integer> current2 = l2.head;
+        Node<Integer> current1 = linked_list_one.head;
+        Node<Integer> current2 = linked_list_two.head;
         if (size1 > size2) {
             for (int i = 0; i < size1 - size2; i++) {
                 current1 = current1.next;
@@ -328,6 +393,13 @@ public class LinkedLists {
 
     }
 
+    /**
+     * given a linked list, this function checks if the linked list has a loop, if
+     * it does, it returns the intersection node otherwise it returns null
+     * 
+     * @param n
+     * @return
+     */
     public static Node<Integer> getLoopStart(Node<Integer> n) {
         Node<Integer> slow = n.next;
         Node<Integer> fast = n.next.next;
