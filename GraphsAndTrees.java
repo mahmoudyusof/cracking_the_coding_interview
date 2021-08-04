@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import DataStructures.Graphs.*;
 import DataStructures.Trees.*;
 
-public class GraphsAndTrees{
+public class GraphsAndTrees {
     public static boolean routeExists(GraphNode<Integer> source, GraphNode<Integer> sink) {
         HashSet<GraphNode<Integer>> visited_set = new HashSet<>();
         Stack<GraphNode<Integer>> traverse_stack = new Stack<>();
@@ -17,13 +17,13 @@ public class GraphsAndTrees{
 
         traverse_stack.push(source);
         visited_set.add(source);
-        while(!traverse_stack.isEmpty()){
+        while (!traverse_stack.isEmpty()) {
             current = traverse_stack.pop();
-            if(current == sink){
+            if (current == sink) {
                 return true;
             }
-            for(GraphNode<Integer> node : current.seenNodes){
-                if(!visited_set.contains(node)){
+            for (GraphNode<Integer> node : current.seenNodes) {
+                if (!visited_set.contains(node)) {
                     traverse_stack.push(node);
                     visited_set.add(node);
                 }
@@ -52,9 +52,9 @@ public class GraphsAndTrees{
         assertFalse(routeExists(node6, node1));
     }
 
-    public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end){
+    public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
-        if(end - start <= 1){
+        if (end - start <= 1) {
             int mid_index = (start + end) / 2;
             node.data = elements.get(mid_index);
             return;
@@ -64,7 +64,7 @@ public class GraphsAndTrees{
         node.data = elements.get(mid_index);
         node.right = new BinaryTreeNode<>();
         node.left = new BinaryTreeNode<>();
-        populate(node.right, elements, mid_index+1, end);
+        populate(node.right, elements, mid_index + 1, end);
         populate(node.left, elements, start, mid_index);
     }
 
@@ -78,7 +78,7 @@ public class GraphsAndTrees{
     @Test
     public void testMakeMinHeightTree() {
         ArrayList<Integer> elements = new ArrayList<>();
-        for(int i=0; i<15; i++){
+        for (int i = 0; i < 15; i++) {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
@@ -90,28 +90,29 @@ public class GraphsAndTrees{
 
     }
 
-    public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinarySearchTree<Integer> tree){
+    public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinarySearchTree<Integer> tree) {
         ArrayList<LinkedList<Integer>> arr = new ArrayList<>();
         arrayOfDepthsHelper(arr, 0, tree.root);
         return arr;
     }
 
-    public static void arrayOfDepthsHelper(ArrayList<LinkedList<Integer>> arr, int index, BinaryTreeNode<Integer> node) {
-        if(arr.size() < index + 1){
+    public static void arrayOfDepthsHelper(ArrayList<LinkedList<Integer>> arr, int index,
+            BinaryTreeNode<Integer> node) {
+        if (arr.size() < index + 1) {
             LinkedList<Integer> level = new LinkedList<>();
             level.add(node.data);
             arr.add(level);
-        }else{
+        } else {
             LinkedList<Integer> level = arr.get(index);
             level.add(node.data);
         }
-        if(node.right != null){
+        if (node.right != null) {
             arrayOfDepthsHelper(arr, index + 1, node.right);
         }
-        if(node.left != null){
+        if (node.left != null) {
             arrayOfDepthsHelper(arr, index + 1, node.left);
         }
-        if(node.left == null && node.right == null){
+        if (node.left == null && node.right == null) {
             return;
         }
     }
@@ -119,15 +120,15 @@ public class GraphsAndTrees{
     @Test
     public void testArrayOfDepths() {
         ArrayList<Integer> elements = new ArrayList<>();
-        for(int i=0; i<15; i++){
+        for (int i = 0; i < 15; i++) {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
         ArrayList<LinkedList<Integer>> array_of_depths = arrayOfDepths(tree);
-        
+
         assertEquals(4, array_of_depths.size());
         int count = 1;
-        for(LinkedList<Integer> level : array_of_depths){
+        for (LinkedList<Integer> level : array_of_depths) {
             assertEquals(count, level.size());
             count *= 2;
         }
@@ -135,18 +136,20 @@ public class GraphsAndTrees{
 
     public static boolean checkBalanced(BinaryTreeNode<Integer> node) {
         // recurrence ending
-        if(node.left == null && node.right == null) return true;
+        if (node.left == null && node.right == null)
+            return true;
 
-        if(node.left == null && node.right.getHeight() > 1){
+        if (node.left == null && node.right.getHeight() > 1) {
             return false;
         }
 
-        if(node.right == null && node.left.getHeight() > 1){
+        if (node.right == null && node.left.getHeight() > 1) {
             return false;
         }
 
         int diff = node.right.getHeight() - node.left.getHeight();
-        if(diff > 1 || diff < -1) return false;
+        if (diff > 1 || diff < -1)
+            return false;
 
         return checkBalanced(node.right) && checkBalanced(node.left);
     }
@@ -154,14 +157,14 @@ public class GraphsAndTrees{
     @Test
     public void testCheckBalanced() {
         ArrayList<Integer> elements = new ArrayList<>();
-        for(int i=0; i<15; i++){
+        for (int i = 0; i < 15; i++) {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
         assertTrue(checkBalanced(tree.root));
 
         tree = new BinarySearchTree<>();
-        for(int i=0; i<15; i++){
+        for (int i = 0; i < 15; i++) {
             tree.insert(i);
         }
         assertFalse(checkBalanced(tree.root));

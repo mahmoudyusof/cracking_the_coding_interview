@@ -4,22 +4,21 @@ import java.util.Stack;
 
 import org.junit.jupiter.api.Test;
 
-
 public class StacksAndQueues {
     public static Stack<Integer> sortStack(Stack<Integer> s) {
         Stack<Integer> sorted = new Stack<>();
-        while(!s.isEmpty()){
-            if(sorted.isEmpty() || s.peek() < sorted.peek()){
+        while (!s.isEmpty()) {
+            if (sorted.isEmpty() || s.peek() < sorted.peek()) {
                 sorted.push(s.pop());
-            }else{
+            } else {
                 int temp = s.pop();
                 int count = 0;
-                while(!sorted.isEmpty() && temp > sorted.peek()){
+                while (!sorted.isEmpty() && temp > sorted.peek()) {
                     s.push(sorted.pop());
                     count++;
                 }
                 sorted.push(temp);
-                for(int i=0; i<count; i++){
+                for (int i = 0; i < count; i++) {
                     sorted.push(s.pop());
                 }
             }
@@ -28,7 +27,7 @@ public class StacksAndQueues {
     }
 
     @Test
-    public void testSortStack(){
+    public void testSortStack() {
         Stack<Integer> s = new Stack<>();
         s.push(5);
         s.push(2);
@@ -41,7 +40,7 @@ public class StacksAndQueues {
 
         assertFalse(sorted.isEmpty());
         int count = 0;
-        while(!sorted.isEmpty()){
+        while (!sorted.isEmpty()) {
             int value = sorted.pop();
             assertEquals(count, value);
             assert value == count;

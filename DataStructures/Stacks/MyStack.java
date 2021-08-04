@@ -7,15 +7,16 @@ public class MyStack<T extends Comparable<T>> {
     public StackNode<T> head;
     public StackNode<T> tail;
     public int size = 0;
+
     /**
      * define whatever you want
      */
-    public void push(T item){
+    public void push(T item) {
         size++;
-        if (head == null){
+        if (head == null) {
             head = new StackNode<>(item);
             tail = head;
-        }else{
+        } else {
             StackNode<T> n = new StackNode<>(item);
             n.prev = tail;
             tail.next = n;
@@ -23,25 +24,24 @@ public class MyStack<T extends Comparable<T>> {
         }
     }
 
-
-    public void push(StackNode<T> item){
+    public void push(StackNode<T> item) {
         size++;
-        if (head == null){
+        if (head == null) {
             head = item;
             tail = head;
-        }else{
+        } else {
             item.prev = tail;
             tail.next = item;
             tail = item;
         }
     }
 
-    public T peek(){
+    public T peek() {
         return tail.value;
     }
 
-    public T pop() throws EmptyStackException{
-        if(size == 0){
+    public T pop() throws EmptyStackException {
+        if (size == 0) {
             throw new EmptyStackException();
         }
         size--;
@@ -51,7 +51,7 @@ public class MyStack<T extends Comparable<T>> {
         return value;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return size == 0;
     }
 }

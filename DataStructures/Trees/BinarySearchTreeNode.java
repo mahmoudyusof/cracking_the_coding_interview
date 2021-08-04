@@ -1,31 +1,31 @@
 package DataStructures.Trees;
 
-public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNode<T>{
+public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNode<T> {
 
-    public BinarySearchTreeNode(T value){
+    public BinarySearchTreeNode(T value) {
         data = value;
     }
 
-    public BinarySearchTreeNode(){
+    public BinarySearchTreeNode() {
         return;
     }
 
-    public void insert(T data){
-        if(this.data == null){
+    public void insert(T data) {
+        if (this.data == null) {
             this.data = data;
             return;
         }
 
-        if(data.compareTo(this.data) >= 0){
-            if(this.right != null){
+        if (data.compareTo(this.data) >= 0) {
+            if (this.right != null) {
                 this.right.insert(data);
-            }else{
+            } else {
                 this.right = new BinarySearchTreeNode<T>(data);
             }
-        }else{
-            if(this.left != null){
+        } else {
+            if (this.left != null) {
                 this.left.insert(data);
-            }else{
+            } else {
                 this.left = new BinarySearchTreeNode<T>(data);
             }
         }

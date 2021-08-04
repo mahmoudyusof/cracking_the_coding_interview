@@ -5,36 +5,33 @@ import Helpers.*;
 
 import org.junit.jupiter.api.Test;
 
-/**
- * ArraysAndStrings
- */
 public class ArraysAndStrings {
 
     /**
      * isUnique problem solution
      * 
-     * @param s string to be tested
+     * @param str string to be tested
      * @return true if the string has only unique characters
      */
-    public static boolean isUnique(String s) {
+    public static boolean isUnique(String str) {
         HashSet<Character> characterSet = new HashSet<>(128); // can scale up if needed for unicode
-        for (int i = 0; i < s.length(); i++) {
-            if (characterSet.contains(s.charAt(i))) {
+        for (int i = 0; i < str.length(); i++) {
+            if (characterSet.contains(str.charAt(i))) {
                 return false;
             } else {
-                characterSet.add(s.charAt(i));
+                characterSet.add(str.charAt(i));
             }
         }
         return true;
     }
 
-    public static boolean isUniqueBitVector(String s) {
+    public static boolean isUniqueBitVector(String str) {
         BitSet flags = new BitSet(128); // only valid for ascii
-        for (int i = 0; i < s.length(); i++) {
-            if (flags.get((int) s.charAt(i))) {
+        for (int i = 0; i < str.length(); i++) {
+            if (flags.get((int) str.charAt(i))) {
                 return false;
             } else {
-                flags.set((int) s.charAt(i));
+                flags.set((int) str.charAt(i));
             }
         }
         return true;
@@ -53,12 +50,12 @@ public class ArraysAndStrings {
     /**
      * check if string s is a permutation of string t
      * 
-     * @param s
+     * @param source
      * @param t
      * @return true if s is permutation of t
      */
-    public static boolean isPermutation(String s, String t) {
-        if (s.length() != t.length())
+    public static boolean isPermutation(String source, String target) {
+        if (source.length() != target.length())
             return false;
         // could be done in O(n^2) simply, but that is really bad
         // another solution would be to sort both of them then compare O(nlog(n))
@@ -66,9 +63,11 @@ public class ArraysAndStrings {
         HashMap<Character, Integer> source_map = new HashMap<>();
         HashMap<Character, Integer> target_map = new HashMap<>();
 
-        for (int i = 0; i < s.length(); i++) {
-            source_map.put(s.charAt(i), source_map.containsKey(s.charAt(i)) ? source_map.get(s.charAt(i)) + 1 : 1);
-            target_map.put(t.charAt(i), target_map.containsKey(t.charAt(i)) ? target_map.get(t.charAt(i)) + 1 : 1);
+        for (int i = 0; i < source.length(); i++) {
+            source_map.put(source.charAt(i),
+                    source_map.containsKey(source.charAt(i)) ? source_map.get(source.charAt(i)) + 1 : 1);
+            target_map.put(target.charAt(i),
+                    target_map.containsKey(target.charAt(i)) ? target_map.get(target.charAt(i)) + 1 : 1);
         }
 
         return source_map.equals(target_map);
@@ -85,20 +84,20 @@ public class ArraysAndStrings {
     }
     ////////////////////// END isPermutation ///////////////////////////////
 
-    public static void urlify(char[] s, int length) {
+    public static void urlify(char[] str, int length) {
         int cursor = length - 1;
         boolean edge = true;
         for (int i = length - 1; i >= 0; i--) {
-            if (s[i] == ' ') {
+            if (str[i] == ' ') {
                 if (edge)
                     continue;
-                s[cursor] = '0';
-                s[cursor - 1] = '2';
-                s[cursor - 2] = '%';
+                str[cursor] = '0';
+                str[cursor - 1] = '2';
+                str[cursor - 2] = '%';
                 cursor -= 3;
             } else {
                 edge = false;
-                s[cursor] = s[i];
+                str[cursor] = str[i];
                 cursor--;
             }
         }
@@ -115,10 +114,10 @@ public class ArraysAndStrings {
     }
     /////////////////////////// END urlify ///////////////////////////////
 
-    public static boolean isPalindromPermutation(String s) {
+    public static boolean isPalindromPermutation(String str) {
         BitSet flags = new BitSet(128); // this size works for ascii
-        for (int i = 0; i < s.length(); i++) {
-            flags.set((int) s.charAt(i), !flags.get((int) s.charAt(i))); // just invert the bit at this location
+        for (int i = 0; i < str.length(); i++) {
+            flags.set((int) str.charAt(i), !flags.get((int) str.charAt(i))); // just invert the bit at this location
         }
         return flags.cardinality() < 2; // more than one unique character means it is not a permutation of a palindrome
     }
@@ -133,11 +132,11 @@ public class ArraysAndStrings {
     }
     //////////////////// END isPalindromePermutation //////////////////////
 
-    public static boolean checkEdit(String s, String t) {
-        // will make sure this function only gets equally sized strings
+    public static boolean checkEdit(String source, String target) {
+        // will make sure this function only gets equally sized string
         boolean foundOne = false;
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != t.charAt(i)) {
+        for (int i = 0; i < source.length(); i++) {
+            if (source.charAt(i) != target.charAt(i)) {
                 if (foundOne)
                     return false;
                 else
@@ -159,11 +158,11 @@ public class ArraysAndStrings {
         assertFalse(checkEdit(anchor, different));
     }
 
-    public static boolean checkAddsOrDeletes(String s, String t) {
+    public static boolean checkAddsOrDeletes(String source, String target) {
         // will make sure that s is always one character longer than t
         int stringsOffset = 0; // becomes 1 when we find a difference for the first time
-        for (int i = 0; i < t.length(); i++) {
-            if (s.charAt(i + stringsOffset) != t.charAt(i)) {
+        for (int i = 0; i < target.length(); i++) {
+            if (source.charAt(i + stringsOffset) != target.charAt(i)) {
                 if (stringsOffset == 1)
                     return false;
                 else
@@ -188,13 +187,13 @@ public class ArraysAndStrings {
         assertFalse(checkAddsOrDeletes(anchor, different));
     }
 
-    public static boolean oneOrNoEdits(String s, String t) {
-        if (s.length() == t.length())
-            return checkEdit(s, t);
-        else if (s.length() - t.length() == 1)
-            return checkAddsOrDeletes(s, t);
-        else if (s.length() - t.length() == -1) {
-            return checkAddsOrDeletes(t, s);
+    public static boolean oneOrNoEdits(String source, String target) {
+        if (source.length() == target.length())
+            return checkEdit(source, target);
+        else if (source.length() - target.length() == 1)
+            return checkAddsOrDeletes(source, target);
+        else if (source.length() - target.length() == -1) {
+            return checkAddsOrDeletes(target, source);
         } else
             return false;
     }
@@ -213,29 +212,29 @@ public class ArraysAndStrings {
     }
     ////////////////////////// END oneOrNoEdits ////////////////////////////
 
-    public static String compressString(String s) {
+    public static String compressString(String str) {
         StringBuilder sb = new StringBuilder();
         int counter = 0;
         Character history = null;
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < str.length(); i++) {
             if (history == null) {
-                history = s.charAt(i);
+                history = str.charAt(i);
                 counter = 1;
                 continue;
             }
-            if (s.charAt(i) == history) {
+            if (str.charAt(i) == history) {
                 counter++;
             } else {
                 sb.append(history);
                 sb.append((char) (counter + '0'));
-                history = s.charAt(i);
+                history = str.charAt(i);
                 counter = 1;
             }
         }
         sb.append(history);
         sb.append((char) (counter + '0'));
         String newString = sb.toString();
-        return newString.length() < s.length() ? newString : s;
+        return newString.length() < str.length() ? newString : str;
     }
 
     @Test
@@ -271,17 +270,9 @@ public class ArraysAndStrings {
 
     @Test
     public void testRotate() {
-        int[][] mat = new int[][] { 
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 9 } 
-        };
+        int[][] mat = new int[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
-        int[][] rotated = new int[][] {
-            { 7, 4, 1 },
-            { 8, 5, 2 },
-            { 9, 6, 3 } 
-        };
+        int[][] rotated = new int[][] { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 } };
 
         int[][] error_mat = new int[][] { { 1, 2, 3 }, { 4, 5, 6 } };
 
@@ -321,17 +312,9 @@ public class ArraysAndStrings {
 
     @Test
     public void testBroadcastZero() {
-        int[][] mat = new int[][] {
-            {1, 2, 3},
-            {0, 5, 6},
-            {7, 8, 0}
-        };
+        int[][] mat = new int[][] { { 1, 2, 3 }, { 0, 5, 6 }, { 7, 8, 0 } };
 
-        int[][] zeroed = new int[][]{
-            {0, 2, 0},
-            {0, 0, 0},
-            {0, 0, 0}
-        };
+        int[][] zeroed = new int[][] { { 0, 2, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
         broadcastZero(mat);
         assertTrue(ArrayHelpers.matrixEqual(mat, zeroed));
