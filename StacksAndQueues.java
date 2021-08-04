@@ -1,9 +1,9 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Stack;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class StacksAndQueues {
     public static Stack<Integer> sortStack(Stack<Integer> s) {
