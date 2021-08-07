@@ -153,7 +153,8 @@ public class LinkedLists {
         return less;
     }
 
-    public static void testPartition() {
+    @Test
+    public void testPartition() {
         MyLinkedList<Integer> ll = new MyLinkedList<>();
         ll.insert(5);
         ll.insert(2);
@@ -287,7 +288,8 @@ public class LinkedLists {
         return true;
     }
 
-    public static void testIsPalindrome() {
+    @Test
+    public void testIsPalindrome() {
         MyLinkedList<Character> palindrome = new MyLinkedList<>();
         MyLinkedList<Character> not_palindrome = new MyLinkedList<>();
 
@@ -388,6 +390,7 @@ public class LinkedLists {
         ni2.insert(2);
         ni2.insert(3);
 
+        // use assertSame instead of 
         assertEquals(Integer.valueOf(3), getIntersectionNode(i1, i2).value);
         assertNull(getIntersectionNode(ni1, ni2));
 
