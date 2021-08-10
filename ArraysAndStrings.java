@@ -82,8 +82,14 @@ public class ArraysAndStrings {
         assertTrue(isPermutation(anchor_text, permutation));
         assertFalse(isPermutation(anchor_text, not_permutation));
     }
-    ////////////////////// END isPermutation ///////////////////////////////
 
+    /**
+     * replaces empty spaces with a url encoded version %20
+     * takes the length of the string after modification and the string itself has extra
+     * spaces to acount for the added characters
+     * @param str
+     * @param length
+     */
     public static void urlify(char[] str, int length) {
         int cursor = length - 1;
         boolean edge = true;
@@ -112,8 +118,13 @@ public class ArraysAndStrings {
         assertEquals(spaced[5], '2');
         assertEquals(spaced[6], '0');
     }
-    /////////////////////////// END urlify ///////////////////////////////
 
+
+    /**
+     * checks if a string is a permutation of a palindrome
+     * @param str
+     * @return
+     */
     public static boolean isPalindromPermutation(String str) {
         BitSet flags = new BitSet(128); // this size works for ascii
         for (int i = 0; i < str.length(); i++) {
@@ -130,8 +141,14 @@ public class ArraysAndStrings {
         assertTrue(isPalindromPermutation(palindrom_permutation));
         assertFalse(isPalindromPermutation(not_palindrom_permutation));
     }
-    //////////////////// END isPalindromePermutation //////////////////////
 
+    /**
+     * takes two strings and returns true if they are one edit away or the same
+     * an edit means one character is changed, not removed, not added, changed
+     * @param source
+     * @param target
+     * @return
+     */
     public static boolean checkEdit(String source, String target) {
         // will make sure this function only gets equally sized string
         boolean foundOne = false;
@@ -158,6 +175,12 @@ public class ArraysAndStrings {
         assertFalse(checkEdit(anchor, different));
     }
 
+    /**
+     * takes two strings and returns true if one string is one character away from the other
+     * @param source
+     * @param target
+     * @return
+     */
     public static boolean checkAddsOrDeletes(String source, String target) {
         // will make sure that s is always one character longer than t
         int stringsOffset = 0; // becomes 1 when we find a difference for the first time
@@ -187,6 +210,12 @@ public class ArraysAndStrings {
         assertFalse(checkAddsOrDeletes(anchor, different));
     }
 
+    /**
+     * takes two strings and returns true if the strings is one edit distance away from one another
+     * @param source
+     * @param target
+     * @return
+     */
     public static boolean oneOrNoEdits(String source, String target) {
         if (source.length() == target.length())
             return checkEdit(source, target);
@@ -210,8 +239,12 @@ public class ArraysAndStrings {
         }
         assertFalse(oneOrNoEdits(anchor, different));
     }
-    ////////////////////////// END oneOrNoEdits ////////////////////////////
 
+    /**
+     * replaces repeated subsequent characters with only one character then the frequency
+     * @param str
+     * @return
+     */
     public static String compressString(String str) {
         StringBuilder sb = new StringBuilder();
         int counter = 0;
@@ -226,13 +259,13 @@ public class ArraysAndStrings {
                 counter++;
             } else {
                 sb.append(history);
-                sb.append((char) (counter + '0'));
+                sb.append(Integer.toString(counter));
                 history = str.charAt(i);
                 counter = 1;
             }
         }
         sb.append(history);
-        sb.append((char) (counter + '0'));
+        sb.append(Integer.toString(counter));
         String newString = sb.toString();
         return newString.length() < str.length() ? newString : str;
     }
@@ -241,12 +274,18 @@ public class ArraysAndStrings {
     public void testCompressString() {
         String repeated = "aaaabbbccd";
         String not_repeated = "abcdefgh";
+        String more_than_nine = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbb";
 
         assertEquals(String.valueOf("a4b3c2d1"), compressString(repeated));
         assertEquals(not_repeated, compressString(not_repeated));
+        assertEquals("a32b19", compressString(more_than_nine));
     }
-    ////////////////////////// END compressString ///////////////////////////
 
+    /**
+     * rotates a matrix clock wise by 90 degrees
+     * @param mat
+     * @throws IndexOutOfBoundsException
+     */
     public static void rotate(int[][] mat) throws IndexOutOfBoundsException {
         if (mat.length != mat[0].length)
             throw new IndexOutOfBoundsException("shape is not correct, provide a square matrix");
@@ -280,8 +319,12 @@ public class ArraysAndStrings {
         assertTrue(ArrayHelpers.matrixEqual(mat, rotated));
         assertThrows(IndexOutOfBoundsException.class, () -> rotate(error_mat));
     }
-    //////////////////////// END rotate ///////////////////////////////
-
+    
+    /**
+     * for each element in the matrix, if it is zero, the function is going to set
+     * its row and column to zeros
+     * @param mat
+     */
     public static void broadcastZero(int[][] mat) {
         int i, j;
 
