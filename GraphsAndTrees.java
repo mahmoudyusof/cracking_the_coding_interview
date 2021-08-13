@@ -10,6 +10,12 @@ import DataStructures.Graphs.*;
 import DataStructures.Trees.*;
 
 public class GraphsAndTrees {
+    /**
+     * takes two nodes in a graph and checks if there is a route between them
+     * @param source
+     * @param sink
+     * @return
+     */
     public static boolean routeExists(GraphNode<Integer> source, GraphNode<Integer> sink) {
         HashSet<GraphNode<Integer>> visited_set = new HashSet<>();
         Stack<GraphNode<Integer>> traverse_stack = new Stack<>();
@@ -52,6 +58,14 @@ public class GraphsAndTrees {
         assertFalse(routeExists(node6, node1));
     }
 
+    /**
+     * takes an array, start index, end index and recursively adds elements to
+     * a binary search tree mid first
+     * @param node
+     * @param elements
+     * @param start
+     * @param end
+     */
     public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
         if (end - start <= 1) {
@@ -68,6 +82,11 @@ public class GraphsAndTrees {
         populate(node.left, elements, start, mid_index);
     }
 
+    /**
+     * creates a binary search tree of minimum height
+     * @param elements
+     * @return
+     */
     public static BinarySearchTree<Integer> makeMinHeightTree(ArrayList<Integer> elements) {
         int size = elements.size();
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
@@ -88,14 +107,38 @@ public class GraphsAndTrees {
         tree = makeMinHeightTree(elements);
         assertEquals(5, tree.getHeight());
 
+
+        elements = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            elements.add(i / 2);
+        }
+        tree = makeMinHeightTree(elements);
+        assertEquals(4, tree.getHeight());
+
+        elements.add(15 / 2);
+        tree = makeMinHeightTree(elements);
+        assertEquals(5, tree.getHeight());
     }
 
+    /**
+     * takes a tree and creates an array for each level of the tree
+     * @param tree
+     * @return
+     */
     public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinarySearchTree<Integer> tree) {
         ArrayList<LinkedList<Integer>> arr = new ArrayList<>();
         arrayOfDepthsHelper(arr, 0, tree.root);
         return arr;
     }
 
+    /**
+     * recursive helper function
+     * takes an array of linkedlists and the index of the linked list to which we should add the element
+     * which is also the level of the node in the tree and adds the element to the list
+     * @param arr
+     * @param index
+     * @param node
+     */
     public static void arrayOfDepthsHelper(ArrayList<LinkedList<Integer>> arr, int index,
             BinaryTreeNode<Integer> node) {
         if (arr.size() < index + 1) {
@@ -134,6 +177,11 @@ public class GraphsAndTrees {
         }
     }
 
+    /**
+     * check if a tree which's root is the given node is balanced
+     * @param node
+     * @return
+     */
     public static boolean checkBalanced(BinaryTreeNode<Integer> node) {
         // recurrence ending
         if (node.left == null && node.right == null)

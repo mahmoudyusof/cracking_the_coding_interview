@@ -8,9 +8,6 @@ public class MyStack<T extends Comparable<T>> {
     public StackNode<T> tail;
     public int size = 0;
 
-    /**
-     * define whatever you want
-     */
     public void push(T item) {
         size++;
         if (head == null) {

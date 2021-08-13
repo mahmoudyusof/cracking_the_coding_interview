@@ -1,6 +1,12 @@
 package Helpers;
 
 public class ArrayHelpers {
+    /**
+     * returns true if both 2D Arrays are equal
+     * @param mat1
+     * @param mat2
+     * @return
+     */
     public static boolean matrixEqual(int[][] mat1, int[][] mat2) {
         if (mat1.length != mat2.length) {
             return false;

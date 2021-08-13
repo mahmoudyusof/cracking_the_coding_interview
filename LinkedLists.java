@@ -360,39 +360,39 @@ public class LinkedLists {
     @Test
     public void testGetIntersectionNode() {
         Node<Integer> intersection = new Node<>(3);
-        MyLinkedList<Integer> i1 = new MyLinkedList<>();
-        MyLinkedList<Integer> i2 = new MyLinkedList<>();
+        MyLinkedList<Integer> intersecting1 = new MyLinkedList<>();
+        MyLinkedList<Integer> intersecting2 = new MyLinkedList<>();
 
-        i1.insert(-1);
-        i1.insert(0);
-        i1.insert(1);
-        i1.insert(2);
-        i1.insert(intersection);
-        i1.insert(4);
-        i1.insert(5);
+        intersecting1.insert(-1);
+        intersecting1.insert(0);
+        intersecting1.insert(1);
+        intersecting1.insert(2);
+        intersecting1.insert(intersection);
+        intersecting1.insert(4);
+        intersecting1.insert(5);
 
-        i2.insert(1);
-        i2.insert(2);
-        i2.insert(intersection);
+        intersecting2.insert(1);
+        intersecting2.insert(2);
+        intersecting2.insert(intersection);
 
-        MyLinkedList<Integer> ni1 = new MyLinkedList<>();
-        MyLinkedList<Integer> ni2 = new MyLinkedList<>();
+        MyLinkedList<Integer> not_intersecting1 = new MyLinkedList<>();
+        MyLinkedList<Integer> not_intersecting2 = new MyLinkedList<>();
 
-        ni1.insert(-1);
-        ni1.insert(0);
-        ni1.insert(1);
-        ni1.insert(2);
-        ni1.insert(3);
-        ni1.insert(4);
-        ni1.insert(5);
+        not_intersecting1.insert(-1);
+        not_intersecting1.insert(0);
+        not_intersecting1.insert(1);
+        not_intersecting1.insert(2);
+        not_intersecting1.insert(3);
+        not_intersecting1.insert(4);
+        not_intersecting1.insert(5);
 
-        ni2.insert(1);
-        ni2.insert(2);
-        ni2.insert(3);
+        not_intersecting2.insert(1);
+        not_intersecting2.insert(2);
+        not_intersecting2.insert(3);
 
         // use assertSame instead of 
-        assertEquals(Integer.valueOf(3), getIntersectionNode(i1, i2).value);
-        assertNull(getIntersectionNode(ni1, ni2));
+        assertEquals(Integer.valueOf(3), getIntersectionNode(intersecting1, intersecting2).value);
+        assertNull(getIntersectionNode(not_intersecting1, not_intersecting2));
 
     }
 
