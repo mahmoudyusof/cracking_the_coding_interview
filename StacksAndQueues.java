@@ -4,6 +4,8 @@ import java.util.Stack;
 
 import org.junit.jupiter.api.Test;
 
+import DataStructures.Stacks.*;
+
 public class StacksAndQueues {
     /**
      * Sorts a stack using another stack
@@ -51,5 +53,24 @@ public class StacksAndQueues {
             assert value == count;
             count++;
         }
+    }
+
+    @Test
+    public void testMinStack(){
+        MyMinStack<Integer> minStack = new MyMinStack<>();
+        for(int i=4; i>0; i--){
+            minStack.push(i);
+        }
+        for(int i=0; i<4; i++){
+            minStack.push(i);
+        }
+
+        assertEquals(Integer.valueOf(0), minStack.min());
+
+        for(int i=0; i<4; i++){
+            minStack.pop();
+        }
+
+        assertEquals(Integer.valueOf(1), minStack.min());
     }
 }

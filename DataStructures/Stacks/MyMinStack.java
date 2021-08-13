@@ -4,17 +4,13 @@ import java.util.EmptyStackException;
 import java.util.LinkedList;
 
 public class MyMinStack<T extends Comparable<T>> extends MyStack<T> {
-
-    public StackNode<T> head;
-    public StackNode<T> tail;
-    public int size = 0;
     private LinkedList<T> mins = new LinkedList<>();
 
 
     public void push(T item) {
         super.push(item);
         // record minimum value in history linked list
-        if (item.compareTo(mins.getLast()) <= 0) {
+        if (mins.size() == 0 || item.compareTo(mins.getLast()) <= 0) {
             mins.add(item);
         }
     }
