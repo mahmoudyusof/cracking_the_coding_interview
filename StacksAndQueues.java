@@ -35,15 +35,15 @@ public class StacksAndQueues {
 
     @Test
     public void testSortStack() {
-        Stack<Integer> s = new Stack<>();
-        s.push(5);
-        s.push(2);
-        s.push(3);
-        s.push(4);
-        s.push(0);
-        s.push(1);
+        Stack<Integer> stack = new Stack<>();
+        stack.push(5);
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+        stack.push(0);
+        stack.push(1);
 
-        Stack<Integer> sorted = sortStack(s);
+        Stack<Integer> sorted = sortStack(stack);
 
         assertFalse(sorted.isEmpty());
         int count = 0;
