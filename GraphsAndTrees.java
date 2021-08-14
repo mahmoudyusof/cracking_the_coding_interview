@@ -252,4 +252,29 @@ public class GraphsAndTrees {
         assertTrue(isBinarySearchTree(is_binary_search_tree.root));
         assertFalse(isBinarySearchTree(not_binary_search_tree.root));
     }
+
+    @Test
+    public void testNext(){
+        ArrayList<Integer> elements = new ArrayList<>();
+        BinaryTree<Integer> is_binary_search_tree;
+        BinaryTree<Integer> not_binary_search_tree = new BinaryTree<>();
+        Integer count = 0;
+
+        for(int i=0; i<7; i++){
+            elements.add(i);
+            not_binary_search_tree.insert(i);
+        }
+        is_binary_search_tree = makeMinHeightTree(elements);
+
+        BinaryTreeNode<Integer> search_iterator = is_binary_search_tree.root.getLeftLeafe();
+        BinaryTreeNode<Integer> not_search_iterator = not_binary_search_tree.root.getLeftLeafe();
+
+        while(search_iterator.next() != null){
+            assertEquals(search_iterator.data, not_search_iterator.data);
+            assertEquals(search_iterator.data, count);
+            count++;
+            search_iterator = search_iterator.next();
+            not_search_iterator = not_search_iterator.next();
+        }
+    }
 }

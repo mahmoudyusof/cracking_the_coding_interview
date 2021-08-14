@@ -21,12 +21,14 @@ public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNod
                 this.right.insert(data);
             } else {
                 this.right = new BinarySearchTreeNode<T>(data);
+                this.right.parent = this;
             }
         } else {
             if (this.left != null) {
                 this.left.insert(data);
             } else {
                 this.left = new BinarySearchTreeNode<T>(data);
+                this.left.parent = this;
             }
         }
     }
