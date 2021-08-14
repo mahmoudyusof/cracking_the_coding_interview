@@ -14,6 +14,15 @@ public class BinaryTreeNode<T extends Comparable<T>> {
     }
 
     public void insert(T value) {
+        if(data == null){
+            data = value;
+        }else if(right == null){
+            right = new BinaryTreeNode<>(value);
+        }else if(left == null){
+            left = new BinaryTreeNode<>(value);
+        }else{
+            right.insert(value);
+        }
     }
 
     public int getHeight() {

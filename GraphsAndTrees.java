@@ -1,11 +1,7 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.*;
 import DataStructures.Graphs.*;
 import DataStructures.Trees.*;
 
@@ -69,9 +65,13 @@ public class GraphsAndTrees {
     public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
         if (end - start <= 1) {
-            int mid_index = (start + end) / 2;
-            node.data = elements.get(mid_index);
-            return;
+            try{
+                int mid_index = (start + end) / 2;
+                node.data = elements.get(mid_index);
+                return;
+            }catch(IndexOutOfBoundsException e){
+                return;
+            }
         }
 
         int mid_index = (start + end) / 2;
@@ -97,12 +97,13 @@ public class GraphsAndTrees {
     @Test
     public void testMakeMinHeightTree() {
         ArrayList<Integer> elements = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 14; i++) {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
         assertEquals(4, tree.getHeight());
 
+        elements.add(14);
         elements.add(15);
         tree = makeMinHeightTree(elements);
         assertEquals(5, tree.getHeight());
@@ -216,5 +217,39 @@ public class GraphsAndTrees {
             tree.insert(i);
         }
         assertFalse(checkBalanced(tree.root));
+    }
+
+    public static boolean isBinarySearchTree(BinaryTreeNode<Integer> root){
+        boolean right_condition = false, left_condition = false;
+        if(root.right == null) {
+            right_condition = true;
+        }else{
+            right_condition = (root.right.data >= root.data);
+            right_condition = right_condition && isBinarySearchTree(root.right);
+        }
+
+        if(root.left == null) {
+            left_condition = true;
+        }else{
+            left_condition = (root.left.data < root.data) && isBinarySearchTree(root.left);
+        }
+
+        return right_condition && left_condition;
+    }
+
+    @Test
+    public void testIsBinarySearchTree(){
+        ArrayList<Integer> elements = new ArrayList<>();
+        BinaryTree<Integer> is_binary_search_tree = new BinaryTree<>();
+        BinaryTree<Integer> not_binary_search_tree = new BinaryTree<>();
+
+        for(int i=0; i<7; i++){
+            elements.add(i);
+            not_binary_search_tree.insert(i);
+        }
+        is_binary_search_tree = makeMinHeightTree(elements);
+
+        assertTrue(isBinarySearchTree(is_binary_search_tree.root));
+        assertFalse(isBinarySearchTree(not_binary_search_tree.root));
     }
 }
