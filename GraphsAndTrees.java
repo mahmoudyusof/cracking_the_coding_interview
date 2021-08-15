@@ -101,6 +101,11 @@ public class GraphsAndTrees {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
+        // BinaryTreeNode<Integer> node = tree.root.getLeftLeafe();
+        // while(node != null){
+        //     System.out.println(node.data);
+        //     node = node.next();
+        // }
         assertEquals(4, tree.getHeight());
 
         elements.add(14);
@@ -126,7 +131,7 @@ public class GraphsAndTrees {
      * @param tree
      * @return
      */
-    public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinarySearchTree<Integer> tree) {
+    public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinaryTree<Integer> tree) {
         ArrayList<LinkedList<Integer>> arr = new ArrayList<>();
         arrayOfDepthsHelper(arr, 0, tree.root);
         return arr;
@@ -257,7 +262,7 @@ public class GraphsAndTrees {
     public void testNext(){
         ArrayList<Integer> elements = new ArrayList<>();
         BinaryTree<Integer> is_binary_search_tree;
-        BinaryTree<Integer> not_binary_search_tree = new BinaryTree<>();
+        BinaryTree<Integer> not_binary_search_tree = new BinarySearchTree<>();
         Integer count = 0;
 
         for(int i=0; i<7; i++){
@@ -269,7 +274,7 @@ public class GraphsAndTrees {
         BinaryTreeNode<Integer> search_iterator = is_binary_search_tree.root.getLeftLeafe();
         BinaryTreeNode<Integer> not_search_iterator = not_binary_search_tree.root.getLeftLeafe();
 
-        while(search_iterator.next() != null){
+        while(search_iterator != null){
             assertEquals(search_iterator.data, not_search_iterator.data);
             assertEquals(search_iterator.data, count);
             count++;

@@ -167,10 +167,15 @@ public class LinkedLists {
 
         MyLinkedList<Integer> newList = partition(ll, 5);
         Node<Integer> current = newList.head;
-        while (current != null) {
-            System.out.println(current.value);
+        while (current != null && current.value <= 5) {
             current = current.next;
         }
+
+        while(current != null){
+            assertTrue(current.value >= 5);
+            current = current.next;
+        }
+
     }
 
     /**
