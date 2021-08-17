@@ -64,24 +64,13 @@ public class GraphsAndTrees {
      * @param start
      * @param end
      */
-    public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end) {
+    public static void populate(BinaryTree<Integer> tree, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
-        if (end - start <= 1) {
-            try {
-                int mid_index = (start + end) / 2;
-                node.data = elements.get(mid_index);
-                return;
-            } catch (IndexOutOfBoundsException e) {
-                return;
-            }
-        }
-
+        if(start > end) return;
         int mid_index = (start + end) / 2;
-        node.data = elements.get(mid_index);
-        node.right = new BinaryTreeNode<>();
-        node.left = new BinaryTreeNode<>();
-        populate(node.right, elements, mid_index + 1, end);
-        populate(node.left, elements, start, mid_index);
+        tree.insert(elements.get(mid_index));
+        populate(tree, elements, mid_index + 1, end);
+        populate(tree, elements, start, mid_index-1);
     }
 
     /**
@@ -93,7 +82,7 @@ public class GraphsAndTrees {
     public static BinarySearchTree<Integer> makeMinHeightTree(ArrayList<Integer> elements) {
         int size = elements.size();
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
-        populate(tree.root, elements, 0, size);
+        populate(tree, elements, 0, size-1);
         return tree;
     }
 
@@ -109,11 +98,14 @@ public class GraphsAndTrees {
         // System.out.println(node.data);
         // node = node.next();
         // }
+        show(tree);
         assertEquals(4, tree.getHeight());
 
         elements.add(14);
         elements.add(15);
         tree = makeMinHeightTree(elements);
+        System.out.println("==================");
+        show(tree);
         assertEquals(5, tree.getHeight());
 
         elements = new ArrayList<>();
@@ -121,11 +113,24 @@ public class GraphsAndTrees {
             elements.add(i / 2);
         }
         tree = makeMinHeightTree(elements);
-        assertEquals(4, tree.getHeight());
-
+        System.out.println("=================");
+        show(tree);
+        assertEquals(5, tree.getHeight());
         elements.add(15 / 2);
         tree = makeMinHeightTree(elements);
+        System.out.println("=================");
+        show(tree);
         assertEquals(5, tree.getHeight());
+    }
+
+    public static void show(BinaryTree<Integer> tree){
+        for(LinkedList<Integer> level : arrayOfDepths(tree)){
+            for(Integer i : level){
+                System.out.print(i);
+                System.out.print(" ");
+            }
+            System.out.println(" ");
+        }
     }
 
     /**
@@ -310,10 +315,6 @@ public class GraphsAndTrees {
             if(current == null){
                 return null;
             }
-            // ArrayList<GraphNode<Character>> children = current.outgoing;
-            // for(GraphNode<Character> child : children){
-            //     current.removeChild(child);
-            // }
             while(current.outgoing.size() > 0){
                 current.removeChild(current.outgoing.get(0));
             }
@@ -351,9 +352,36 @@ public class GraphsAndTrees {
         };
         ArrayList<GraphNode<Character>> order = getBuildOrder(projects, dependencies);
         assertEquals(7, order.size());
-        for(GraphNode<Character> node : order){
-            System.out.println(node.value);
-        }
         assertEquals(Character.valueOf('e'), order.get(6).value);
+    }
+
+    public static BinaryTreeNode<Integer> getMostRecentAncestor(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> node_a, BinaryTreeNode<Integer> node_b){
+        if(root == null || node_a == null || node_b == null) return root;
+        boolean right_contains_a = root.right.contains(node_a);
+        boolean right_contains_b = root.right.contains(node_b);
+
+        if(right_contains_a != right_contains_b) return root;
+
+        if(right_contains_a) return getMostRecentAncestor(root.right, node_a, node_b);
+
+        return getMostRecentAncestor(root.left, node_a, node_b);
+    }
+
+    @Test
+    public void testGetMostRecentAncestor(){
+        BinaryTree<Integer> is_binary_search_tree;
+        ArrayList<Integer> elements = new ArrayList<>();
+        for (int i = 0; i < 16; i++) {
+            elements.add(i);
+        }
+        is_binary_search_tree = makeMinHeightTree(elements);
+
+        BinaryTreeNode<Integer> left = is_binary_search_tree.getLeftLeafe();
+        BinaryTreeNode<Integer> right = is_binary_search_tree.getRightLeafe();
+
+        assertSame(is_binary_search_tree.root, getMostRecentAncestor(is_binary_search_tree.root, left, right));
+        assertNotNull(left.parent);
+        assertNotNull(left.parent.right);
+        assertSame(left.parent, getMostRecentAncestor(is_binary_search_tree.root, left, left.parent.right));
     }
 }

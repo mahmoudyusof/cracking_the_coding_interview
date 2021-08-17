@@ -15,16 +15,30 @@ public class BinaryTreeNode<T extends Comparable<T>> {
     }
 
     public void insert(T value) {
-        if(data == null){
+        if (data == null) {
             data = value;
-        }else if(right == null){
-            right = new BinaryTreeNode<>(value);
-            right.parent = this;
-        }else if(left == null){
-            left = new BinaryTreeNode<>(value);
-            left.parent = this;
-        }else{
-            right.insert(value);
+        } else if (this.right == null) {
+            this.right = new BinaryTreeNode<>(value);
+            this.right.parent = this;
+        } else if (this.left == null) {
+            this.left = new BinaryTreeNode<>(value);
+            this.left.parent = this;
+        } else {
+            this.right.insert(value);
+        }
+    }
+
+    public void insert(BinaryTreeNode<T> node) {
+        if (data == null) {
+            data = node.data;
+        } else if (this.right == null) {
+            this.right = node;
+            this.right.parent = this;
+        } else if (this.left == null) {
+            this.left = node;
+            this.left.parent = this;
+        } else {
+            this.right.insert(node);
         }
     }
 
@@ -42,32 +56,59 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         }
     }
 
-    public BinaryTreeNode<T> next(){
-        if(this.right != null){
+    public BinaryTreeNode<T> next() {
+        if (this.right != null) {
             return getLeftLeafe(this.right);
         }
-
-        if(this.parent == null){
-            return null;
+        BinaryTreeNode<T> current = this;
+        BinaryTreeNode<T> current_parent = current.parent;
+        // Go up until we're on left instead of right
+        while (current_parent != null && current_parent.left != current) {
+            current = current_parent;
+            current_parent = current_parent.parent;
         }
-
-        if(this == this.parent.left){
-            return this.parent;
-        }else{
-            return getLeftLeafe(this);
-        }
+        return current_parent;
 
     }
 
-    private BinaryTreeNode<T> getLeftLeafe(BinaryTreeNode<T> node){
+    private BinaryTreeNode<T> getLeftLeafe(BinaryTreeNode<T> node) {
         BinaryTreeNode<T> left_leafe = node;
-        while(left_leafe.left != null){
+        while (left_leafe.left != null) {
             left_leafe = left_leafe.left;
         }
         return left_leafe;
     }
 
-    public BinaryTreeNode<T> getLeftLeafe(){
+    public BinaryTreeNode<T> getLeftLeafe() {
         return getLeftLeafe(this);
+    }
+
+    private BinaryTreeNode<T> getRightLeafe(BinaryTreeNode<T> node) {
+        BinaryTreeNode<T> right_leafe = node;
+        while (right_leafe.right != null) {
+            right_leafe = right_leafe.right;
+        }
+        return right_leafe;
+    }
+
+    public BinaryTreeNode<T> getRightLeafe() {
+        return getRightLeafe(this);
+    }
+
+    public boolean contains(BinaryTreeNode<T> node) {
+        return getDepth(node) != 0;
+    }
+
+    public int getDepth(BinaryTreeNode<T> node) {
+        return getDepthHelper(this, node, 0);
+    }
+
+    protected int getDepthHelper(BinaryTreeNode<T> root, BinaryTreeNode<T> node, int level)
+            throws NullPointerException {
+        if (root == null)
+            return 0;
+        if (root == node)
+            return level + 1;
+        return getDepthHelper(root.left, node, level + 1) + getDepthHelper(root.right, node, level + 1);
     }
 }
