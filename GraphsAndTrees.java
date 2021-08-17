@@ -8,6 +8,7 @@ import DataStructures.Trees.*;
 public class GraphsAndTrees {
     /**
      * takes two nodes in a graph and checks if there is a route between them
+     * 
      * @param source
      * @param sink
      * @return
@@ -24,7 +25,7 @@ public class GraphsAndTrees {
             if (current == sink) {
                 return true;
             }
-            for (GraphNode<Integer> node : current.seenNodes) {
+            for (GraphNode<Integer> node : current.outgoing) {
                 if (!visited_set.contains(node)) {
                     traverse_stack.push(node);
                     visited_set.add(node);
@@ -55,8 +56,9 @@ public class GraphsAndTrees {
     }
 
     /**
-     * takes an array, start index, end index and recursively adds elements to
-     * a binary search tree mid first
+     * takes an array, start index, end index and recursively adds elements to a
+     * binary search tree mid first
+     * 
      * @param node
      * @param elements
      * @param start
@@ -65,11 +67,11 @@ public class GraphsAndTrees {
     public static void populate(BinaryTreeNode<Integer> node, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
         if (end - start <= 1) {
-            try{
+            try {
                 int mid_index = (start + end) / 2;
                 node.data = elements.get(mid_index);
                 return;
-            }catch(IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 return;
             }
         }
@@ -84,6 +86,7 @@ public class GraphsAndTrees {
 
     /**
      * creates a binary search tree of minimum height
+     * 
      * @param elements
      * @return
      */
@@ -103,8 +106,8 @@ public class GraphsAndTrees {
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
         // BinaryTreeNode<Integer> node = tree.root.getLeftLeafe();
         // while(node != null){
-        //     System.out.println(node.data);
-        //     node = node.next();
+        // System.out.println(node.data);
+        // node = node.next();
         // }
         assertEquals(4, tree.getHeight());
 
@@ -112,7 +115,6 @@ public class GraphsAndTrees {
         elements.add(15);
         tree = makeMinHeightTree(elements);
         assertEquals(5, tree.getHeight());
-
 
         elements = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
@@ -128,6 +130,7 @@ public class GraphsAndTrees {
 
     /**
      * takes a tree and creates an array for each level of the tree
+     * 
      * @param tree
      * @return
      */
@@ -138,9 +141,10 @@ public class GraphsAndTrees {
     }
 
     /**
-     * recursive helper function
-     * takes an array of linkedlists and the index of the linked list to which we should add the element
-     * which is also the level of the node in the tree and adds the element to the list
+     * recursive helper function takes an array of linkedlists and the index of the
+     * linked list to which we should add the element which is also the level of the
+     * node in the tree and adds the element to the list
+     * 
      * @param arr
      * @param index
      * @param node
@@ -185,6 +189,7 @@ public class GraphsAndTrees {
 
     /**
      * check if a tree which's root is the given node is balanced
+     * 
      * @param node
      * @return
      */
@@ -224,18 +229,18 @@ public class GraphsAndTrees {
         assertFalse(checkBalanced(tree.root));
     }
 
-    public static boolean isBinarySearchTree(BinaryTreeNode<Integer> root){
+    public static boolean isBinarySearchTree(BinaryTreeNode<Integer> root) {
         boolean right_condition = false, left_condition = false;
-        if(root.right == null) {
+        if (root.right == null) {
             right_condition = true;
-        }else{
+        } else {
             right_condition = (root.right.data >= root.data);
             right_condition = right_condition && isBinarySearchTree(root.right);
         }
 
-        if(root.left == null) {
+        if (root.left == null) {
             left_condition = true;
-        }else{
+        } else {
             left_condition = (root.left.data < root.data) && isBinarySearchTree(root.left);
         }
 
@@ -243,12 +248,12 @@ public class GraphsAndTrees {
     }
 
     @Test
-    public void testIsBinarySearchTree(){
+    public void testIsBinarySearchTree() {
         ArrayList<Integer> elements = new ArrayList<>();
         BinaryTree<Integer> is_binary_search_tree = new BinaryTree<>();
         BinaryTree<Integer> not_binary_search_tree = new BinaryTree<>();
 
-        for(int i=0; i<7; i++){
+        for (int i = 0; i < 7; i++) {
             elements.add(i);
             not_binary_search_tree.insert(i);
         }
@@ -259,13 +264,13 @@ public class GraphsAndTrees {
     }
 
     @Test
-    public void testNext(){
+    public void testNext() {
         ArrayList<Integer> elements = new ArrayList<>();
         BinaryTree<Integer> is_binary_search_tree;
         BinaryTree<Integer> not_binary_search_tree = new BinarySearchTree<>();
         Integer count = 0;
 
-        for(int i=0; i<7; i++){
+        for (int i = 0; i < 7; i++) {
             elements.add(i);
             not_binary_search_tree.insert(i);
         }
@@ -274,12 +279,81 @@ public class GraphsAndTrees {
         BinaryTreeNode<Integer> search_iterator = is_binary_search_tree.root.getLeftLeafe();
         BinaryTreeNode<Integer> not_search_iterator = not_binary_search_tree.root.getLeftLeafe();
 
-        while(search_iterator != null){
+        while (search_iterator != null) {
             assertEquals(search_iterator.data, not_search_iterator.data);
             assertEquals(search_iterator.data, count);
             count++;
             search_iterator = search_iterator.next();
             not_search_iterator = not_search_iterator.next();
         }
+    }
+
+    public static ArrayList<GraphNode<Character>> getBuildOrder(Character[] projects, Character[][] dependencies) {
+        Graph<Character> graph = new Graph<>();
+        ArrayList<GraphNode<Character>> project_nodes = new ArrayList<>();
+        for (Character project : projects) {
+            project_nodes.add(graph.getOrCreateNode(project));
+        }
+        for (Character[] dependency : dependencies) {
+            Character first = dependency[0];
+            Character second = dependency[1];
+            graph.addEdge(first, second);
+        }
+        ArrayList<GraphNode<Character>> order = new ArrayList<>();
+        for(int i=0; i<projects.length; i++){
+            order.add(null);
+        }
+        int end_of_list = addNonDependent(order, project_nodes, 0);
+        int to_be_processed = 0;
+        while (to_be_processed < order.size()){
+            GraphNode<Character> current = order.get(to_be_processed);
+            if(current == null){
+                return null;
+            }
+            // ArrayList<GraphNode<Character>> children = current.outgoing;
+            // for(GraphNode<Character> child : children){
+            //     current.removeChild(child);
+            // }
+            while(current.outgoing.size() > 0){
+                current.removeChild(current.outgoing.get(0));
+            }
+
+            end_of_list = addNonDependent(order, project_nodes, end_of_list);
+            to_be_processed++;
+        }
+        return order;
+    }
+
+    public static int addNonDependent(ArrayList<GraphNode<Character>> order, ArrayList<GraphNode<Character>> projects, int offset) {
+        for (GraphNode<Character> project : projects) {
+            if (project.incomming.size() == 0 && !order.contains(project)) { // should be a hashset for better performance
+                // another solution would be to remove the node from the hash table of the graph
+                // but I don't want to do that
+                order.set(offset, project);
+                offset++;
+            }
+        }
+        return offset;
+    }
+
+    @Test
+    public void testGetBuildOrder(){
+        Character[] projects = new Character[]{'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+        Character[][] dependencies = new Character[][]{
+            {'a', 'e'},
+            {'b', 'e'},
+            {'b', 'a'},
+            {'f', 'a'},
+            {'c', 'a'},
+            {'f', 'c'},
+            {'f', 'b'},
+            {'d', 'g'},
+        };
+        ArrayList<GraphNode<Character>> order = getBuildOrder(projects, dependencies);
+        assertEquals(7, order.size());
+        for(GraphNode<Character> node : order){
+            System.out.println(node.value);
+        }
+        assertEquals(Character.valueOf('e'), order.get(6).value);
     }
 }

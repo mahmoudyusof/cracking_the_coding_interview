@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class GraphNode<T> {
     public T value;
-    public ArrayList<GraphNode<T>> seenNodes = new ArrayList<>();
+    public ArrayList<GraphNode<T>> outgoing = new ArrayList<>();
+    public ArrayList<GraphNode<T>> incomming = new ArrayList<>();
 
     /**
      * constructor of graph node
@@ -19,7 +20,8 @@ public class GraphNode<T> {
      * @param node of type GraphNode<T>. the node at the end of the directed edge
      */
     public void appendChild(GraphNode<T> node){
-        seenNodes.add(node);
+        outgoing.add(node);
+        node.incomming.add(this);
     }
 
     /**
@@ -29,5 +31,15 @@ public class GraphNode<T> {
     public void addDoubleEdge(GraphNode<T> node){
         appendChild(node);
         node.appendChild(this);
+    }
+
+    public void removeChild(GraphNode<T> child){
+        outgoing.remove(child);
+        child.incomming.remove(this);
+    }
+
+    public void removeDoubleEdge(GraphNode<T> sibling){
+        sibling.removeChild(this);
+        this.removeChild(sibling);
     }
 }
