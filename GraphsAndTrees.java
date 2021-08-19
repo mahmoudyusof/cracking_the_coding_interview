@@ -66,11 +66,12 @@ public class GraphsAndTrees {
      */
     public static void populate(BinaryTree<Integer> tree, ArrayList<Integer> elements, int start, int end) {
         // terminal condition
-        if(start > end) return;
+        if (start > end)
+            return;
         int mid_index = (start + end) / 2;
         tree.insert(elements.get(mid_index));
         populate(tree, elements, mid_index + 1, end);
-        populate(tree, elements, start, mid_index-1);
+        populate(tree, elements, start, mid_index - 1);
     }
 
     /**
@@ -82,7 +83,7 @@ public class GraphsAndTrees {
     public static BinarySearchTree<Integer> makeMinHeightTree(ArrayList<Integer> elements) {
         int size = elements.size();
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
-        populate(tree, elements, 0, size-1);
+        populate(tree, elements, 0, size - 1);
         return tree;
     }
 
@@ -93,19 +94,14 @@ public class GraphsAndTrees {
             elements.add(i);
         }
         BinarySearchTree<Integer> tree = makeMinHeightTree(elements);
-        // BinaryTreeNode<Integer> node = tree.root.getLeftLeafe();
-        // while(node != null){
-        // System.out.println(node.data);
-        // node = node.next();
-        // }
-        show(tree);
+        // show(tree);
         assertEquals(4, tree.getHeight());
 
         elements.add(14);
         elements.add(15);
         tree = makeMinHeightTree(elements);
-        System.out.println("==================");
-        show(tree);
+        // System.out.println("==================");
+        // show(tree);
         assertEquals(5, tree.getHeight());
 
         elements = new ArrayList<>();
@@ -113,8 +109,8 @@ public class GraphsAndTrees {
             elements.add(i / 2);
         }
         tree = makeMinHeightTree(elements);
-        System.out.println("=================");
-        show(tree);
+        // System.out.println("=================");
+        // show(tree);
         assertEquals(5, tree.getHeight());
         elements.add(15 / 2);
         tree = makeMinHeightTree(elements);
@@ -123,9 +119,9 @@ public class GraphsAndTrees {
         assertEquals(5, tree.getHeight());
     }
 
-    public static void show(BinaryTree<Integer> tree){
-        for(LinkedList<Integer> level : arrayOfDepths(tree)){
-            for(Integer i : level){
+    public static void show(BinaryTree<Integer> tree) {
+        for (LinkedList<Integer> level : arrayOfDepths(tree)) {
+            for (Integer i : level) {
                 System.out.print(i);
                 System.out.print(" ");
             }
@@ -234,6 +230,11 @@ public class GraphsAndTrees {
         assertFalse(checkBalanced(tree.root));
     }
 
+    /**
+     * check if a binary tree is a binary search tree
+     * @param root root node of tree in question
+     * @return
+     */
     public static boolean isBinarySearchTree(BinaryTreeNode<Integer> root) {
         boolean right_condition = false, left_condition = false;
         if (root.right == null) {
@@ -293,6 +294,13 @@ public class GraphsAndTrees {
         }
     }
 
+    /**
+     * given a list of project and a list of lists defining the dependencies between 
+     * projects, this function decides what is the execution order if any
+     * @param projects
+     * @param dependencies
+     * @return
+     */
     public static ArrayList<GraphNode<Character>> getBuildOrder(Character[] projects, Character[][] dependencies) {
         Graph<Character> graph = new Graph<>();
         ArrayList<GraphNode<Character>> project_nodes = new ArrayList<>();
@@ -305,17 +313,17 @@ public class GraphsAndTrees {
             graph.addEdge(first, second);
         }
         ArrayList<GraphNode<Character>> order = new ArrayList<>();
-        for(int i=0; i<projects.length; i++){
+        for (int i = 0; i < projects.length; i++) {
             order.add(null);
         }
         int end_of_list = addNonDependent(order, project_nodes, 0);
         int to_be_processed = 0;
-        while (to_be_processed < order.size()){
+        while (to_be_processed < order.size()) {
             GraphNode<Character> current = order.get(to_be_processed);
-            if(current == null){
+            if (current == null) {
                 return null;
             }
-            while(current.outgoing.size() > 0){
+            while (current.outgoing.size() > 0) {
                 current.removeChild(current.outgoing.get(0));
             }
 
@@ -325,9 +333,18 @@ public class GraphsAndTrees {
         return order;
     }
 
-    public static int addNonDependent(ArrayList<GraphNode<Character>> order, ArrayList<GraphNode<Character>> projects, int offset) {
+    /**
+     * get non dependent projects and add them to the order array
+     * @param order
+     * @param projects
+     * @param offset
+     * @return
+     */
+    public static int addNonDependent(ArrayList<GraphNode<Character>> order, ArrayList<GraphNode<Character>> projects,
+            int offset) {
         for (GraphNode<Character> project : projects) {
-            if (project.incomming.size() == 0 && !order.contains(project)) { // should be a hashset for better performance
+            if (project.incomming.size() == 0 && !order.contains(project)) { // should be a hashset for better
+                                                                             // performance
                 // another solution would be to remove the node from the hash table of the graph
                 // but I don't want to do that
                 order.set(offset, project);
@@ -338,37 +355,41 @@ public class GraphsAndTrees {
     }
 
     @Test
-    public void testGetBuildOrder(){
-        Character[] projects = new Character[]{'a', 'b', 'c', 'd', 'e', 'f', 'g'};
-        Character[][] dependencies = new Character[][]{
-            {'a', 'e'},
-            {'b', 'e'},
-            {'b', 'a'},
-            {'f', 'a'},
-            {'c', 'a'},
-            {'f', 'c'},
-            {'f', 'b'},
-            {'d', 'g'},
-        };
+    public void testGetBuildOrder() {
+        Character[] projects = new Character[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g' };
+        Character[][] dependencies = new Character[][] { { 'a', 'e' }, { 'b', 'e' }, { 'b', 'a' }, { 'f', 'a' },
+                { 'c', 'a' }, { 'f', 'c' }, { 'f', 'b' }, { 'd', 'g' }, };
         ArrayList<GraphNode<Character>> order = getBuildOrder(projects, dependencies);
         assertEquals(7, order.size());
         assertEquals(Character.valueOf('e'), order.get(6).value);
     }
 
-    public static BinaryTreeNode<Integer> getMostRecentAncestor(BinaryTreeNode<Integer> root, BinaryTreeNode<Integer> node_a, BinaryTreeNode<Integer> node_b){
-        if(root == null || node_a == null || node_b == null) return root;
+    /**
+     * given a binary tree and two nodes in the tree
+     * get the most deepest common ancestor
+     * @param root
+     * @param node_a
+     * @param node_b
+     * @return
+     */
+    public static BinaryTreeNode<Integer> getMostRecentAncestor(BinaryTreeNode<Integer> root,
+            BinaryTreeNode<Integer> node_a, BinaryTreeNode<Integer> node_b) {
+        if (root == null || node_a == null || node_b == null)
+            return root;
         boolean right_contains_a = root.right.contains(node_a);
         boolean right_contains_b = root.right.contains(node_b);
 
-        if(right_contains_a != right_contains_b) return root;
+        if (right_contains_a != right_contains_b)
+            return root;
 
-        if(right_contains_a) return getMostRecentAncestor(root.right, node_a, node_b);
+        if (right_contains_a)
+            return getMostRecentAncestor(root.right, node_a, node_b);
 
         return getMostRecentAncestor(root.left, node_a, node_b);
     }
 
     @Test
-    public void testGetMostRecentAncestor(){
+    public void testGetMostRecentAncestor() {
         BinaryTree<Integer> is_binary_search_tree;
         ArrayList<Integer> elements = new ArrayList<>();
         for (int i = 0; i < 16; i++) {
@@ -383,5 +404,76 @@ public class GraphsAndTrees {
         assertNotNull(left.parent);
         assertNotNull(left.parent.right);
         assertSame(left.parent, getMostRecentAncestor(is_binary_search_tree.root, left, left.parent.right));
+    }
+
+    /**
+     * given a binary search tree node, get all insertion sequences that
+     * can result in this tree
+     * @param node
+     * @return
+     */
+    public static ArrayList<LinkedList<Integer>> allSequences(BinaryTreeNode<Integer> node) {
+        ArrayList<LinkedList<Integer>> result = new ArrayList<LinkedList<Integer>>();
+        if (node == null) {
+            result.add(new LinkedList<Integer>());
+            return result;
+        }
+        LinkedList<Integer> prefix = new LinkedList<Integer>();
+        prefix.add(node.data);
+        ArrayList<LinkedList<Integer>> leftSeq = allSequences(node.left);
+        ArrayList<LinkedList<Integer>> rightSeq = allSequences(node.right);
+        for (LinkedList<Integer> left : leftSeq) {
+            for (LinkedList<Integer> right : rightSeq) {
+                ArrayList<LinkedList<Integer>> weaved = new ArrayList<LinkedList<Integer>>();
+                weaveLists(left, right, weaved, prefix);
+                result.addAll(weaved);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * given two arrays, weave them togeather and add result to results array
+     * @param first
+     * @param second
+     * @param results
+     * @param prefix
+     */
+    public static void weaveLists(LinkedList<Integer> first, LinkedList<Integer> second,
+            ArrayList<LinkedList<Integer>> results, LinkedList<Integer> prefix) {
+        if (first.size() == 0 || second.size() == 0) {
+            LinkedList<Integer> result = (LinkedList<Integer>) prefix.clone();
+            result.addAll(first);
+            result.addAll(second);
+            results.add(result);
+            return;
+        }
+        int headFirst = first.removeFirst();
+        prefix.addLast(headFirst);
+        weaveLists(first, second, results, prefix);
+        prefix.removeLast();
+        first.addFirst(headFirst);
+
+        int headSecond = second.removeFirst();
+        prefix.addLast(headSecond);
+        weaveLists(first, second, results, prefix);
+        prefix.removeLast();
+        second.addFirst(headSecond);
+    }
+
+    @Test
+    public void testAllSequences(){
+        BinarySearchTree<Integer> simple = new BinarySearchTree<>();
+        BinarySearchTree<Integer> balanced;
+        ArrayList<Integer> elements = new ArrayList<>();
+        for(int i=0; i<3; i++){
+            elements.add(i);
+            simple.insert(i);
+        }
+        balanced = makeMinHeightTree(elements);
+        show(balanced);
+
+        assertEquals(2, allSequences(balanced.root).size());
+        assertEquals(1, allSequences(simple.root).size());
     }
 }
