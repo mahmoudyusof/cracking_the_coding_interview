@@ -64,7 +64,7 @@ public class GraphsAndTrees {
      * @param start
      * @param end
      */
-    public static void populate(BinaryTree<Integer> tree, ArrayList<Integer> elements, int start, int end) {
+    public static <T extends Comparable<T>> void populate(BinaryTree<T> tree, List<T> elements, int start, int end) {
         // terminal condition
         if (start > end)
             return;
@@ -80,9 +80,9 @@ public class GraphsAndTrees {
      * @param elements
      * @return
      */
-    public static BinarySearchTree<Integer> makeMinHeightTree(ArrayList<Integer> elements) {
+    public static <T extends Comparable<T>> BinarySearchTree<T> makeMinHeightTree(List<T> elements) {
         int size = elements.size();
-        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        BinarySearchTree<T> tree = new BinarySearchTree<>();
         populate(tree, elements, 0, size - 1);
         return tree;
     }
@@ -119,9 +119,9 @@ public class GraphsAndTrees {
         assertEquals(5, tree.getHeight());
     }
 
-    public static void show(BinaryTree<Integer> tree) {
-        for (LinkedList<Integer> level : arrayOfDepths(tree)) {
-            for (Integer i : level) {
+    public static <T extends Comparable<T>> void show(BinaryTree<T> tree) {
+        for (LinkedList<T> level : arrayOfDepths(tree)) {
+            for (T i : level) {
                 System.out.print(i);
                 System.out.print(" ");
             }
@@ -135,8 +135,8 @@ public class GraphsAndTrees {
      * @param tree
      * @return
      */
-    public static ArrayList<LinkedList<Integer>> arrayOfDepths(BinaryTree<Integer> tree) {
-        ArrayList<LinkedList<Integer>> arr = new ArrayList<>();
+    public static <T extends Comparable<T>> ArrayList<LinkedList<T>> arrayOfDepths(BinaryTree<T> tree) {
+        ArrayList<LinkedList<T>> arr = new ArrayList<>();
         arrayOfDepthsHelper(arr, 0, tree.root);
         return arr;
     }
@@ -150,14 +150,14 @@ public class GraphsAndTrees {
      * @param index
      * @param node
      */
-    public static void arrayOfDepthsHelper(ArrayList<LinkedList<Integer>> arr, int index,
-            BinaryTreeNode<Integer> node) {
+    public static <T extends Comparable<T>> void arrayOfDepthsHelper(ArrayList<LinkedList<T>> arr, int index,
+            BinaryTreeNode<T> node) {
         if (arr.size() < index + 1) {
-            LinkedList<Integer> level = new LinkedList<>();
+            LinkedList<T> level = new LinkedList<>();
             level.add(node.data);
             arr.add(level);
         } else {
-            LinkedList<Integer> level = arr.get(index);
+            LinkedList<T> level = arr.get(index);
             level.add(node.data);
         }
         if (node.right != null) {
@@ -232,6 +232,7 @@ public class GraphsAndTrees {
 
     /**
      * check if a binary tree is a binary search tree
+     * 
      * @param root root node of tree in question
      * @return
      */
@@ -295,8 +296,9 @@ public class GraphsAndTrees {
     }
 
     /**
-     * given a list of project and a list of lists defining the dependencies between 
+     * given a list of project and a list of lists defining the dependencies between
      * projects, this function decides what is the execution order if any
+     * 
      * @param projects
      * @param dependencies
      * @return
@@ -335,6 +337,7 @@ public class GraphsAndTrees {
 
     /**
      * get non dependent projects and add them to the order array
+     * 
      * @param order
      * @param projects
      * @param offset
@@ -365,8 +368,9 @@ public class GraphsAndTrees {
     }
 
     /**
-     * given a binary tree and two nodes in the tree
-     * get the most deepest common ancestor
+     * given a binary tree and two nodes in the tree get the most deepest common
+     * ancestor
+     * 
      * @param root
      * @param node_a
      * @param node_b
@@ -407,8 +411,9 @@ public class GraphsAndTrees {
     }
 
     /**
-     * given a binary search tree node, get all insertion sequences that
-     * can result in this tree
+     * given a binary search tree node, get all insertion sequences that can result
+     * in this tree
+     * 
      * @param node
      * @return
      */
@@ -434,6 +439,7 @@ public class GraphsAndTrees {
 
     /**
      * given two arrays, weave them togeather and add result to results array
+     * 
      * @param first
      * @param second
      * @param results
@@ -462,11 +468,11 @@ public class GraphsAndTrees {
     }
 
     @Test
-    public void testAllSequences(){
+    public void testAllSequences() {
         BinarySearchTree<Integer> simple = new BinarySearchTree<>();
         BinarySearchTree<Integer> balanced;
         ArrayList<Integer> elements = new ArrayList<>();
-        for(int i=0; i<3; i++){
+        for (int i = 0; i < 3; i++) {
             elements.add(i);
             simple.insert(i);
         }
@@ -476,4 +482,27 @@ public class GraphsAndTrees {
         assertEquals(2, allSequences(balanced.root).size());
         assertEquals(1, allSequences(simple.root).size());
     }
+
+    public static boolean containsTree(BinaryTreeNode<Character> t1, BinaryTreeNode<Character> t2) {
+         StringBuilder string1 = new StringBuilder();
+         StringBuilder string2 = new StringBuilder();
+        
+         getOrderString(t1, string1);
+         getOrderString(t2, string2);
+        
+         return string1.indexOf(string2.toString()) != -1;
+         }
+
+    public static void getOrderString(BinaryTreeNode<Character> node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("X");
+            return;
+        }
+        sb.append(node.data + " ");
+        getOrderString(node.left, sb);
+        getOrderString(node.right, sb);
+    }
+
+    // TODO: test containsTree
+    
 }
