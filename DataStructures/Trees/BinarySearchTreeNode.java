@@ -17,6 +17,7 @@ public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNod
         }
 
         if (data.compareTo(this.data) >= 0) {
+            this.right_size++;
             if (this.right != null) {
                 this.right.insert(data);
             } else {
@@ -24,6 +25,7 @@ public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNod
                 this.right.parent = this;
             }
         } else {
+            this.left_size++;
             if (this.left != null) {
                 this.left.insert(data);
             } else {
@@ -40,6 +42,7 @@ public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNod
         }
 
         if (data.compareTo(this.data) >= 0) {
+            this.right_size++;
             if (this.right != null) {
                 this.right.insert(data);
             } else {
@@ -47,6 +50,7 @@ public class BinarySearchTreeNode<T extends Comparable<T>> extends BinaryTreeNod
                 this.right.parent = this;
             }
         } else {
+            this.left_size++;
             if (this.left != null) {
                 this.left.insert(data);
             } else {

@@ -22,4 +22,20 @@ public class BitHelper{
         int range = ~(clean_left & clean_right);
         return num & range;
     }
+
+    public static boolean getBit(int num, int index){
+        return (num & (1 << index)) != 0;
+    }
+
+    public static int setBit(int num, int index){
+        return num | (1 << index);
+    }
+
+    public static int updateBit(int num, int index, boolean value){
+        if(value){
+            return setBit(num, index);
+        }else{
+            return clearBit(num, index);
+        }
+    }
 }

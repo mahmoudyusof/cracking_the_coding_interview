@@ -1,10 +1,14 @@
 package DataStructures.Trees;
 
+import java.util.Random;
+
 public class BinaryTreeNode<T extends Comparable<T>> {
     public T data;
     public BinaryTreeNode<T> right = null;
     public BinaryTreeNode<T> left = null;
     public BinaryTreeNode<T> parent = null;
+    public int right_size = 0;
+    public int left_size = 0;
 
     public BinaryTreeNode(T d) {
         this.data = d;
@@ -18,13 +22,19 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         if (data == null) {
             data = value;
         } else if (this.right == null) {
+            this.right_size++;
             this.right = new BinaryTreeNode<>(value);
             this.right.parent = this;
         } else if (this.left == null) {
+            this.left_size++;
             this.left = new BinaryTreeNode<>(value);
             this.left.parent = this;
         } else {
-            this.right.insert(value);
+            if(this.right_size > this.left_size){
+                this.left.insert(value);
+            }else{
+                this.right.insert(value);
+            }
         }
     }
 
@@ -32,13 +42,19 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         if (data == null) {
             data = node.data;
         } else if (this.right == null) {
+            this.right_size++;
             this.right = node;
             this.right.parent = this;
         } else if (this.left == null) {
+            this.left_size++;
             this.left = node;
             this.left.parent = this;
         } else {
-            this.right.insert(node);
+            if(this.right_size > this.left_size){
+                this.left.insert(node);
+            }else{
+                this.right.insert(node);
+            }
         }
     }
 
@@ -110,5 +126,17 @@ public class BinaryTreeNode<T extends Comparable<T>> {
         if (root == node)
             return level + 1;
         return getDepthHelper(root.left, node, level + 1) + getDepthHelper(root.right, node, level + 1);
+    }
+
+    public BinaryTreeNode<T> random(){
+        Random rand = new Random();
+        int random_number = rand.nextInt(left_size + right_size + 1);
+        if(random_number == 0){
+            return this;
+        }else if(random_number <= left_size){
+            return this.left.random();
+        }else{
+            return this.right.random();
+        }
     }
 }
