@@ -484,14 +484,14 @@ public class GraphsAndTrees {
     }
 
     public static boolean containsTree(BinaryTreeNode<Character> t1, BinaryTreeNode<Character> t2) {
-         StringBuilder string1 = new StringBuilder();
-         StringBuilder string2 = new StringBuilder();
-        
-         getOrderString(t1, string1);
-         getOrderString(t2, string2);
-        
-         return string1.indexOf(string2.toString()) != -1;
-         }
+        StringBuilder string1 = new StringBuilder();
+        StringBuilder string2 = new StringBuilder();
+
+        getOrderString(t1, string1);
+        getOrderString(t2, string2);
+
+        return string1.indexOf(string2.toString()) != -1;
+    }
 
     public static void getOrderString(BinaryTreeNode<Character> node, StringBuilder sb) {
         if (node == null) {
@@ -504,5 +504,37 @@ public class GraphsAndTrees {
     }
 
     // TODO: test containsTree
-    
+
+    public static int countPathsWithSum(BinaryTreeNode<Integer> root, int target_sum) {
+        return countPathsWithSum(root, target_sum, 0, new HashMap<Integer, Integer>());
+    }
+
+    public static int countPathsWithSum(BinaryTreeNode<Integer> node, int target_sum, int running_sum,
+            HashMap<Integer, Integer> path_count) {
+        if (node == null)
+            return 0;
+
+        running_sum += node.data;
+        int sum = running_sum - target_sum;
+        int totalPaths = path_count.getOrDefault(sum, 0);
+
+        if (running_sum == target_sum) {
+            totalPaths++;
+        }
+
+        incrementHashTable(path_count, running_sum, 1);
+        totalPaths += countPathsWithSum(node.left, target_sum, running_sum, path_count);
+        totalPaths += countPathsWithSum(node.right, target_sum, running_sum, path_count);
+        incrementHashTable(path_count, running_sum, -1);
+        return totalPaths;
+    }
+
+    public static void incrementHashTable(HashMap<Integer, Integer> hash_table, int key, int delta) {
+        int new_count = hash_table.getOrDefault(key, 0) + delta;
+        if (new_count == 0) {
+            hash_table.remove(key);
+        } else {
+            hash_table.put(key, new_count);
+        }
+    }
 }
